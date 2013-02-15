@@ -93,14 +93,15 @@
         _init: function () {
             var self = this;
 
+            self.scroll = new iScroll('scroll', {
+                hScrollbar: false,
+                vScrollbar: false,
+                hideScrollbar: true
+            });
+
             self.yearTicksElem.hide();
             self.decadeTicksElem.hide();
             self.centuryTicksElem.hide();
-
-            self.scroll = new iScroll('scroll', {
-                hScrollbar: false,
-                vScroll: false
-            });
 
             self.backgroundEvents = $.wellcome.timeline.provider.data.BackgroundEvents;
             self.events = $.wellcome.timeline.provider.data.Events;
@@ -146,22 +147,6 @@
             self.createBackgroundEvents();
             self.createEvents();
             self.createTicks();
-
-            // hover time
-            /*
-            self.element.on('mousemove', function (e) {
-            self.hoverTimeElem.css('left', e.clientX - (self.hoverTimeElem.width() / 2));
-            });
-
-            self.hoverTimeElem.on('click', function(e) {
-            var evt = e || window.event;
-
-            $(this).hide();
-            var elementBelow = document.elementFromPoint(evt.clientX, evt.clientY);
-            $(elementBelow).click();
-            $(this).show();
-            });
-            */
         },
 
         createBackgroundEvents: function () {

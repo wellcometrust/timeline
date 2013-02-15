@@ -158,14 +158,16 @@ p {
 	background-color: #000;
 	background-image: url(../img/main_bg.png);
     background-repeat: repeat-x;
+    position: relative;
 }
 
 #timeline .mainPanel #scroll{
 	margin: 0 20px 0 20px;
+    position: absolute;
 }
 
 /*#region Background Events*/
-/*
+
 #timeline .mainPanel #scroll .backgroundEvents{
 	height: 30px;
 	width: 100%;
@@ -191,7 +193,7 @@ p {
     background: url(../img/background_event_left_arrow.png) top left no-repeat, 
                 url(../img/background_event_right_arrow.png) top right no-repeat;
 }
-    */
+
 /*#endregion*/
 
 /*#region Events*/
