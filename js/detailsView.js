@@ -1,0 +1,271 @@
+(function ($) {
+
+    $.widget("wellcome.timeline_detailsView", $.wellcome.timeline_baseDialogueView, {
+
+        isPrevEnabled: false,
+        isNextEnabled: false,
+        isNavigating: false,
+
+        _create: function () {
+            var self = this;
+
+            $.wellcome.timeline_baseDialogueView.prototype._create.call(self);
+
+            self.allowClose = false;
+
+            // bind to global events.
+            $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
+                self.disablePrev();
+                self.disableNext();
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.FINISH_ZOOM, function () {
+                self.refresh();
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.START_NAVIGATING, function (e, direction) {
+                self.isNavigating = true;
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.FINISH_NAVIGATING, function (e, direction) {
+                self.isNavigating = false;
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.SHOW_EVENT_DETAILS_DIALOGUE, function () {
+                self.open();
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.HIDE_EVENT_DETAILS_DIALOGUE, function () {
+                self.close();
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
+                self.disablePrev();
+                self.disableNext();
+                self.prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.SCROLL_STEP, function (e, obj) {
+                self.scroll(parseInt(obj.direction), obj.pos);
+            });
+
+            $.wellcome.timeline.bind($.wellcome.timeline.FINISH_SCROLL, function (e, direction) {
+                self.currentDetailsElem = self.nextDetailsElem;
+                self.centerColElem.find('.wrapper').not(self.currentDetailsElem).remove();
+                self.nextDetailsElem = null;
+            });
+
+            // create ui.
+            self.leftColElem = $('<div class="leftCol"></div>');
+            self.contentElem.append(self.leftColElem);
+
+            self.prevBtnElem = $('<div class="prev"></div>');
+            self.leftColElem.append(self.prevBtnElem);
+
+            self.centerColElem = $('<div class="centerCol"></div>');
+            self.contentElem.append(self.centerColElem);
+
+            self.detailsTemplate = $('\
+                <div class="wrapper">\
+                    <div class="centerLeftCol"></div>\
+                    <div class="centerRightCol">\
+                        <div class="text"></div>\
+                    </div>\
+                </div>');
+
+            self.rightColElem = $('<div class="rightCol"></div>');
+            self.contentElem.append(self.rightColElem);
+
+            self.nextBtnElem = $('<div class="next"></div>');
+            self.rightColElem.append(self.nextBtnElem);
+
+            // init ui.
+            /*
+            self.closeBtnElem.on('click', function (e) {
+            e.preventDefault();
+
+            self._trigger('onClose');
+            });
+            */
+            self.prevBtnElem.on('click', function (e) {
+                e.preventDefault();
+
+                if (self.isPrevEnabled) {
+                    // if at the first event, show intro.
+                    if ($.wellcome.timeline.currentIndex == 0) {
+                        self.prepEvent(-1, self.events[0]);
+
+                        $({ val: 0 }).animate({ val: 1 }, {
+                            duration: 500,
+                            easing: 'easeInOutCubic',
+                            step: function () {
+                                self.scroll(1, this.val);
+                            },
+                            complete: function () {
+                                self.currentDetailsElem = self.nextDetailsElem;
+                                self.refresh();
+
+                            }
+                        });
+                    }
+
+                    self._trigger('onSelectPrev');
+                }
+            });
+
+            self.nextBtnElem.on('click', function (e) {
+                e.preventDefault();
+
+                if (self.isNextEnabled) {
+                    self._trigger('onSelectNext');
+                }
+            });
+
+            self.events = $.wellcome.timeline.provider.data.Events.slice();
+
+            // add intro to start.
+            self.events.unshift($.wellcome.timeline.provider.data);
+
+            self.prepEvent(0, self.events[0]);
+            self.currentDetailsElem = self.nextDetailsElem;
+            self.refresh();
+            self.open();
+        },
+
+        refresh: function () {
+            var self = this;
+
+            if (self.isNavigating) return;
+
+            var currentIndex = $.wellcome.timeline.currentIndex;
+
+            if (currentIndex == -1) {
+                self.disablePrev();
+            } else {
+                self.enablePrev();
+            }
+
+            var length = $.wellcome.timeline.provider.data.Events.length;
+
+            if ($.wellcome.timeline.provider.data.Events[length - 1].isPresent) {
+                length = length - 1;
+            }
+
+            if (currentIndex == length - 1) {
+                self.disableNext();
+            } else {
+                self.enableNext();
+            }
+        },
+
+        disablePrev: function () {
+            var self = this;
+
+            self.isPrevEnabled = false;
+            self.prevBtnElem.addClass('disabled');
+        },
+
+        enablePrev: function () {
+            var self = this;
+
+            self.isPrevEnabled = true;
+            self.prevBtnElem.removeClass('disabled');
+        },
+
+        disableNext: function () {
+            var self = this;
+
+            self.isNextEnabled = false;
+            self.nextBtnElem.addClass('disabled');
+        },
+
+        enableNext: function () {
+            var self = this;
+
+            self.isNextEnabled = true;
+            self.nextBtnElem.removeClass('disabled');
+        },
+
+        prepEvent: function (direction, evnt) {
+            var self = this;
+
+            self.nextDetailsElem = self.detailsTemplate.clone();
+
+            var imgContainerElem = self.nextDetailsElem.find('.centerLeftCol');
+
+            var imgElem = $('<img />');
+
+            if (evnt.FeatureImagePath) {
+                self.nextDetailsElem.removeClass('min');
+                imgElem.prop('src', evnt.FeatureImagePath);
+            }
+
+            imgContainerElem.append(imgElem);
+
+            var $textElem = self.nextDetailsElem.find('.text');
+
+            var $header = $('<header></header>');
+
+            var headerHtml = '<h1>' + evnt.Title + '</h1>';
+
+            if (evnt.StartDisplay) {
+                var date = evnt.StartDisplay;
+
+                if (evnt.EndDisplay) {
+                    date += " - " + evnt.EndDisplay;
+                }
+
+                headerHtml += '<h2>' + date + '</h2>';
+            }
+
+            $header.html(headerHtml);
+
+            $textElem.append($header);
+
+            var $section = $('<section></section>');
+
+            $section.html(evnt.Body);
+
+            // ensure anchor tags link to _blank.
+            $section.find('a').prop('target', '_blank');
+
+            $textElem.append($header);
+            $textElem.append($section);
+
+            self.centerColElem.append(self.nextDetailsElem);
+
+            // if there's already a visible event, position the next event
+            // before or after current event according to direction.
+            if (self.currentDetailsElem) {
+                self.nextDetailsElem.css('left', self.nextDetailsElem.width() * direction);
+            };
+        },
+
+        scroll: function (direction, pos) {
+            var self = this;
+
+            // if there's a current details element, move it out of the way
+            // and slide in next event.
+            // otherwise, the next event is already correctly positioned.
+            if (self.currentDetailsElem) {
+                var targetLeft = self.contentElem.width() * direction;
+                targetLeft *= pos;
+                self.currentDetailsElem.css('left', targetLeft);
+
+                pos = 1 - pos;
+                targetLeft = (self.contentElem.width() * (direction * -1)) * pos;
+
+                self.nextDetailsElem.css('left', targetLeft);
+            }
+        },
+
+        _init: function () {
+
+        },
+
+        _destroy: function () {
+            $.Widget.prototype.destroy.apply(this, arguments);
+        }
+    });
+
+})(jQuery);
