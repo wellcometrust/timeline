@@ -5,6 +5,7 @@
     $.widget("wellcome.timeline_mainPanelView", {
 
         currentZoomLevel: 0,
+        lastZoomLevel: -1,
         isZooming: false,
         isNavigating: false,
 
@@ -790,8 +791,11 @@
         zoomUntilVisible: function (index, callback) {
             var self = this;
 
+            var evnt = self.events[index];
+
+            if (evnt.isVisible) callback();
+
             self.refresh(function () {
-                var evnt = self.events[index];
 
                 if (!evnt.isVisible) {
                     self.zoom(1, function () {
@@ -814,6 +818,7 @@
             self.isZooming = true;
             self._trigger('onStartZoom');
 
+            self.lastZoomLevel = self.currentZoomLevel;
             self.currentZoomLevel += direction;
 
             var currentScroll = self.getCurrentScrollPosition();
@@ -877,29 +882,45 @@
         refresh: function (callback) {
             var self = this;
 
+            // only refresh if a zoom has happened.
+            if (self.currentZoomLevel === self.lastZoomLevel) {
+
+                self.selectCurrentEvent();
+                if (callback) callback();
+                
+                return;
+            } else if (self.lastZoomLevel == -1) {
+                self.lastZoomLevel = self.currentZoomLevel;
+            }
+
+            alert('refresh');
+
             self.updateVisibleEvents();
             self.setEventsZIndex();
             self.updateVisibleTicks();
-
+                
             self.showVisibleEvents(function () {
 
                 self.updateNavigationAvailability();
-
-                // ensure all events are cleared of highlight.
-                self.eventsElem.find('.event').removeClass('highlighted');
-                self.timeElem.find('.tickEvent').removeClass('highlighted');
-
-                var evnt = self.getCurrentEvent();
-
-                if (evnt) {
-                    self.setEventToTop(evnt);
-                    evnt.elem.addClass('selected');
-                    self.selectTickEvent(evnt);
-                }
-
+                self.selectCurrentEvent();
                 if (callback) callback();
             });
+        },
 
+        selectCurrentEvent: function() {
+            var self = this;
+            
+            // ensure all events are cleared of highlight.
+            self.eventsElem.find('.event').removeClass('highlighted');
+            self.timeElem.find('.tickEvent').removeClass('highlighted');
+
+            var evnt = self.getCurrentEvent();
+
+            if (evnt) {
+                self.setEventToTop(evnt);
+                evnt.elem.addClass('selected');
+                self.selectTickEvent(evnt);
+            }
         },
 
         drawBackgroundEvents: function () {
