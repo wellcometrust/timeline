@@ -613,9 +613,9 @@
         getCurrentTicks: function () {
             var self = this;
 
-            if (self.yearTicks.elem.is(':visible')) return self.yearTicks;
-            if (self.decadeTicks.elem.is(':visible')) return self.decadeTicks;
-            if (self.centuryTicks.elem.is(':visible')) return self.centuryTicks;
+            if (self.yearTicks.elem && self.yearTicks.elem.is(':visible')) return self.yearTicks;
+            if (self.decadeTicks.elem && self.decadeTicks.elem.is(':visible')) return self.decadeTicks;
+            if (self.centuryTicks.elem && self.centuryTicks.elem.is(':visible')) return self.centuryTicks;
             return null;
         },
 
