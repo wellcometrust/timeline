@@ -163,6 +163,7 @@ p {
 
 #timeline .mainPanel #scroll{
 	margin: 0 20px 0 20px;
+    height: 500px;
     position: absolute;
 }
 
@@ -316,10 +317,6 @@ p {
 
 #timeline .mainPanel #scroll .events .event.min .leftCol{
     display: none;
-}
-
-#timeline .mainPanel #scroll .events .event.min .rightCol{
-
 }
 
 #timeline .mainPanel #scroll .events .event.present{

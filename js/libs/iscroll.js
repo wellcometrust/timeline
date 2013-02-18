@@ -859,13 +859,30 @@ iScroll.prototype = {
 	},
 
 	_bind: function (type, el, bubble) {
+	    if (!document.addEventListener) {
+	        (el || this.scroller).attachEvent('on' + type, this);
+	    } else {
+	        (el || this.scroller).addEventListener(type, this, !!bubble);
+	    }
+	},
+
+	_unbind: function (type, el, bubble) {
+	    if (!document.addEventListener) {
+	        (el || this.scroller).detachEvent('on' + type, this);
+	    } else {
+	        (el || this.scroller).removeEventListener(type, this, !!bubble);
+	    }
+	},
+
+    /*
+	_bind: function (type, el, bubble) {
 		(el || this.scroller).addEventListener(type, this, !!bubble);
 	},
 
 	_unbind: function (type, el, bubble) {
 		(el || this.scroller).removeEventListener(type, this, !!bubble);
 	},
-
+    */
 
 	/**
 	*
