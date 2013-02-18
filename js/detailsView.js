@@ -84,6 +84,9 @@
             self.rightColElem.append(self.nextBtnElem);
 
             // init ui.
+            self.prevBtnElem.prop('title', $.wellcome.timeline.options.config.DetailsPanelView.Previous);
+            
+            self.nextBtnElem.prop('title', $.wellcome.timeline.options.config.DetailsPanelView.Next);
 
             self.prevBtnElem.on('click', function (e) {
                 e.preventDefault();

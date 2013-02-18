@@ -14,7 +14,6 @@
             self.optionsContainerElem = $('<div class="options"></div>');
             self.element.append(self.optionsContainerElem);
 
-
             self.embedButtonElem = $('<a class="imageButton embed"></a>');
             self.optionsContainerElem.append(self.embedButtonElem);
 

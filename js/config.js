@@ -7,12 +7,16 @@
     "HeaderPanelView":
     {
     	"ZoomIn": "Zoom In",
-    	"ZoomOut": "Zoom Out",
-    	"Reset": "Reset"
+    	"ZoomOut": "Zoom Out"
     },
     "MainPanelView":
     {
         "PresentDay": "Present Day"
+    },
+    "DetailsPanelView":
+    {
+        "Previous": "Previous",
+        "Next": "Next"
     },
     "EmbedView":
     {

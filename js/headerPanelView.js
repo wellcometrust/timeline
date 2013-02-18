@@ -65,6 +65,10 @@
 
             self.titleElem.ellipsisFill(self.title);
 
+            self.zoomInButtonElem.prop('title', $.wellcome.timeline.options.config.HeaderPanelView.ZoomIn);
+            
+            self.zoomOutButtonElem.prop('title', $.wellcome.timeline.options.config.HeaderPanelView.ZoomOut);
+
             // ui event handlers.
             self.zoomInButtonElem.on('click', function (e) {
                 e.preventDefault();

@@ -766,7 +766,6 @@
             if (!self.canZoom(direction)) return;
 
             self.isZooming = true;
-            self.hasZoomed = true;
             self._trigger('onStartZoom');
 
             self.currentZoomLevel += direction;
@@ -799,6 +798,7 @@
                 duration: $.wellcome.timeline.provider.options.zoomAnimationDuration,
                 complete: function () {
                     self.isZooming = false;
+                    self.hasZoomed = true;
 
                     // do a final full redraw without clipping.
                     self.redraw(false, false);
@@ -831,23 +831,25 @@
             var self = this;
 
             if (!resize) {
-                // only refresh if a zoom has happened.
-                if (!self.hasZoomed && self.lastZoomLevel != null) {
+
+                // if scrolled (not zoomed), select the current event
+                // and call back.
+                if (!self.hasZoomed) {
+                    // if there is no previous zoom level,  set it to current.
+                    if (self.lastZoomLevel === null) {
+                        self.lastZoomLevel = self.currentZoomLevel;
+                    }
+
                     self.selectCurrentEvent();
                     if (callback) callback();
                     return;
-                }
-
-                // if this is the first refresh, update the last zoom level to the current
-                // zoom level.
-                // otherwise, a zoom has happened.
-                if (self.lastZoomLevel == null) {
-                    self.lastZoomLevel = self.currentZoomLevel;
-                } else if (self.hasZoomed) {
+                } else {
+                    // reset hasZoomed.
                     self.hasZoomed = false;
                 }
             }
 
+            log('refresh');
             self.updateVisibleEvents();
             self.setEventsZIndex();
             self.updateVisibleTicks();
