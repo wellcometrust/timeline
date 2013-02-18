@@ -56,6 +56,7 @@
 
         // get initial params from the container's 'data-' attributes.
         dataUri = $timeline.attr('data-uri');
+        dataUri = encodeURIComponent(dataUri);
 
         isFullScreen = false;
         height = $timeline.height();

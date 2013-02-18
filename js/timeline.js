@@ -62,6 +62,9 @@
                 },
                 onFinishNavigating: function () {
                     self._trigger(self.FINISH_NAVIGATING);
+                },
+                onRefreshed: function() {
+                    self._trigger(self.REFRESHED);
                 }
             });
 

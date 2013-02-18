@@ -38,7 +38,8 @@
             self.ESCAPE = "onEscape";
             self.REDIRECT = "onRedirect";
             self.CLOSE_ACTIVE_DIALOGUE = "onCloseActiveDialogue";
-
+            self.REFRESHED = "onRefreshed";
+            
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.ESCAPE, function () {
                 if (self.isFullScreen) {

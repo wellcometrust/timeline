@@ -35,6 +35,10 @@
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_NAVIGATING, function (e, direction) {
                 self.isNavigating = false;
             });
+            
+            $.wellcome.timeline.bind($.wellcome.timeline.REFRESHED, function () {
+                self.refresh();
+            });
 
             // create ui.
             self.leftColElem = $('<div class="leftCol"></div>');
@@ -45,9 +49,6 @@
 
             self.rightColElem = $('<div class="rightCol"></div>');
             self.element.append(self.rightColElem);
-
-            //self.resetButtonElem = $('<a class="reset">' + $.wellcome.timeline.options.config.HeaderPanelView.Reset + '</a>');
-            //self.rightColElem.append(self.resetButtonElem);
 
             self.zoomOutButtonElem = $('<div class="zoomOut"></div>');
             self.rightColElem.append(self.zoomOutButtonElem);

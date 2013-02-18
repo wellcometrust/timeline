@@ -58,7 +58,7 @@
                 self.centerColElem.find('.wrapper').not(self.currentDetailsElem).remove();
                 self.nextDetailsElem = null;
             });
-
+   
             // create ui.
             self.leftColElem = $('<div class="leftCol"></div>');
             self.contentElem.append(self.leftColElem);

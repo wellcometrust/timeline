@@ -856,6 +856,9 @@
 
                 self.updateNavigationAvailability();
                 self.selectCurrentEvent();
+                
+                self._trigger('onRefreshed');
+
                 if (callback) callback();
             });
         },
