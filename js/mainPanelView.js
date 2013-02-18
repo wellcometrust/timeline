@@ -5,7 +5,8 @@
     $.widget("wellcome.timeline_mainPanelView", {
 
         currentZoomLevel: 0,
-        lastZoomLevel: -1,
+        lastZoomLevel: null,
+        hasZoomed: false,
         isZooming: false,
         isNavigating: false,
 
@@ -557,59 +558,6 @@
             return evnt.elem.is(":visible");
         },
 
-        drawTicks: function () {
-            var self = this;
-
-            var availableWidth = self.getContentWidth();
-
-            var newTicks;
-
-            if ((availableWidth / self.centuries) <= $.wellcome.timeline.provider.options.maxCenturyIntervalWidth) {
-                newTicks = self.centuryTicks;
-            } else if ((availableWidth / self.decades) <= $.wellcome.timeline.provider.options.maxDecadeIntervalWidth) {
-                newTicks = self.decadeTicks;
-            } else if (self.years < $.wellcome.timeline.provider.options.maxTicks) {
-                newTicks = self.yearTicks;
-            } else {
-                newTicks = self.decadeTicks;
-            }
-
-            if (newTicks !== self.getCurrentTicks()) {
-
-                self.timeElem.find('.ticks').hide();
-
-                // update current ticks.
-                switch (newTicks) {
-                    case self.yearTicks:
-                        self.yearTicks.elem.show();
-                        break;
-                    case self.decadeTicks:
-                        self.decadeTicks.elem.show();
-                        break;
-                    case self.centuryTicks:
-                        self.centuryTicks.elem.show();
-                        break;
-                }
-
-                var currentEvent = self.getCurrentEvent();
-                if (currentEvent) self.selectTickEvent(currentEvent);
-            }
-
-            var intervalWidth = self.getInterval(newTicks.ticks);
-
-            var marginLeft = null;
-
-            for (var i = 0, l = newTicks.ticks.length; i < l; i++) {
-                var tick = newTicks.ticks[i];
-
-                if (!marginLeft) {
-                    marginLeft = parseInt(tick.elem.css('margin-left'));
-                }
-
-                tick.elem.width(intervalWidth - marginLeft);
-            }
-        },
-
         getCurrentEvent: function () {
             return $.wellcome.timeline.getCurrentEvent();
         },
@@ -793,19 +741,21 @@
 
             var evnt = self.events[index];
 
-            if (evnt.isVisible) callback();
+            if (evnt.isVisible) {
+                callback();
+                return;
+            } 
 
             self.refresh(function () {
 
-                if (!evnt.isVisible) {
-                    self.zoom(1, function () {
-                        self.zoomUntilVisible(index, callback);
-                    });
-
+                if (evnt.isVisible) {
+                    callback();
                     return;
                 }
 
-                callback();
+                self.zoom(1, function () {
+                    self.zoomUntilVisible(index, callback);
+                });
             });
         },
 
@@ -816,9 +766,9 @@
             if (!self.canZoom(direction)) return;
 
             self.isZooming = true;
+            self.hasZoomed = true;
             self._trigger('onStartZoom');
 
-            self.lastZoomLevel = self.currentZoomLevel;
             self.currentZoomLevel += direction;
 
             var currentScroll = self.getCurrentScrollPosition();
@@ -865,7 +815,7 @@
             self.contentElem.width(self.element.width());
 
             self.redraw(false, false);
-            self.refresh();
+            self.refresh(null, true);
         },
 
         redraw: function (clip, onlyVisible) {
@@ -875,25 +825,28 @@
             self.drawEvents(clip, onlyVisible);
             self.drawTicks();
             self.scroll.refresh();
-
-            //self.hoverTimeElem.height(self.eventsElem.height());
         },
 
-        refresh: function (callback) {
+        refresh: function (callback, resize) {
             var self = this;
 
-            // only refresh if a zoom has happened.
-            if (self.currentZoomLevel === self.lastZoomLevel) {
+            if (!resize) {
+                // only refresh if a zoom has happened.
+                if (!self.hasZoomed && self.lastZoomLevel != null) {
+                    self.selectCurrentEvent();
+                    if (callback) callback();
+                    return;
+                }
 
-                self.selectCurrentEvent();
-                if (callback) callback();
-                
-                return;
-            } else if (self.lastZoomLevel == -1) {
-                self.lastZoomLevel = self.currentZoomLevel;
+                // if this is the first refresh, update the last zoom level to the current
+                // zoom level.
+                // otherwise, a zoom has happened.
+                if (self.lastZoomLevel == null) {
+                    self.lastZoomLevel = self.currentZoomLevel;
+                } else if (self.hasZoomed) {
+                    self.hasZoomed = false;
+                }
             }
-
-            alert('refresh');
 
             self.updateVisibleEvents();
             self.setEventsZIndex();
@@ -996,6 +949,57 @@
                 evnt.lineHeight = self.eventsElem.height() - evnt.top - parseInt(evnt.elem.css('margin-top')) - parseInt(evnt.elem.height()) - (evnt.isPresent ? 9 : 7); // -7 is to make small gap above ticks bar
 
                 lineElem.height(evnt.lineHeight);
+            }
+        },
+
+        drawTicks: function () {
+            var self = this;
+
+            var availableWidth = self.getContentWidth();
+
+            var newTicks;
+
+            if ((availableWidth / self.centuries) <= $.wellcome.timeline.provider.options.maxCenturyIntervalWidth) {
+                newTicks = self.centuryTicks;
+            } else if ((availableWidth / self.decades) <= $.wellcome.timeline.provider.options.maxDecadeIntervalWidth) {
+                newTicks = self.decadeTicks;
+            } else if (self.years < $.wellcome.timeline.provider.options.maxTicks) {
+                newTicks = self.yearTicks;
+            } else {
+                newTicks = self.decadeTicks;
+            }
+
+            if (newTicks !== self.getCurrentTicks()) {
+
+                self.timeElem.find('.ticks').hide();
+
+                // update current ticks.
+                switch (newTicks) {
+                    case self.yearTicks:
+                        self.yearTicks.elem.show();
+                        break;
+                    case self.decadeTicks:
+                        self.decadeTicks.elem.show();
+                        break;
+                    case self.centuryTicks:
+                        self.centuryTicks.elem.show();
+                        break;
+                }
+
+            }
+
+            var intervalWidth = self.getInterval(newTicks.ticks);
+
+            var marginLeft = null;
+
+            for (var i = 0, l = newTicks.ticks.length; i < l; i++) {
+                var tick = newTicks.ticks[i];
+
+                if (!marginLeft) {
+                    marginLeft = parseInt(tick.elem.css('margin-left'));
+                }
+
+                tick.elem.width(intervalWidth - marginLeft);
             }
         },
 

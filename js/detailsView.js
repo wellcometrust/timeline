@@ -5,6 +5,10 @@
         isPrevEnabled: false,
         isNextEnabled: false,
         isNavigating: false,
+        
+        options: {
+            maxWidth: 950
+        },
 
         _create: function () {
             var self = this;
@@ -80,13 +84,7 @@
             self.rightColElem.append(self.nextBtnElem);
 
             // init ui.
-            /*
-            self.closeBtnElem.on('click', function (e) {
-            e.preventDefault();
 
-            self._trigger('onClose');
-            });
-            */
             self.prevBtnElem.on('click', function (e) {
                 e.preventDefault();
 
@@ -158,32 +156,37 @@
             }
         },
 
-        disablePrev: function () {
+        resize: function() {
             var self = this;
 
-            self.isPrevEnabled = false;
-            self.prevBtnElem.addClass('disabled');
-        },
+            var $win = $(window);
 
-        enablePrev: function () {
-            var self = this;
+            var width = $win.width() - parseInt(self.element.css('margin-left')) - parseInt(self.element.css('margin-right'));
 
-            self.isPrevEnabled = true;
-            self.prevBtnElem.removeClass('disabled');
-        },
+            if (width > self.options.maxWidth) {
+                width = self.options.maxWidth;
+            }
 
-        disableNext: function () {
-            var self = this;
+            self.element.width(width);
+            
+            self.element.css({
+                left: ($win.width() / 2) - (self.element.outerWidth(true) / 2)
+            });
 
-            self.isNextEnabled = false;
-            self.nextBtnElem.addClass('disabled');
-        },
+            var centerColWidth = width - self.leftColElem.outerWidth() - self.rightColElem.outerWidth();
 
-        enableNext: function () {
-            var self = this;
+            self.centerColElem.width(centerColWidth);
+            self.centerColElem.find('.wrapper').width(centerColWidth);
 
-            self.isNextEnabled = true;
-            self.nextBtnElem.removeClass('disabled');
+            var centerLeftColWidth = self.centerLeftColElem.outerWidth(true);
+            var centerRightColWidth = self.centerColElem.width() - centerLeftColWidth;
+
+            var leftMargin = parseInt(self.centerRightColElem.css('margin-left'));
+            var rightMargin = parseInt(self.centerRightColElem.css('margin-right'));
+
+            centerRightColWidth = centerRightColWidth - (leftMargin + rightMargin);
+
+            self.centerRightColElem.width(centerRightColWidth);
         },
 
         prepEvent: function (direction, evnt) {
@@ -239,6 +242,11 @@
             if (self.currentDetailsElem) {
                 self.nextDetailsElem.css('left', self.nextDetailsElem.width() * direction);
             };
+
+            self.centerLeftColElem = self.nextDetailsElem.find('.centerLeftCol');
+            self.centerRightColElem = self.nextDetailsElem.find('.centerRightCol');
+
+            self.resize();
         },
 
         scroll: function (direction, pos) {
@@ -257,6 +265,34 @@
 
                 self.nextDetailsElem.css('left', targetLeft);
             }
+        },
+
+        disablePrev: function () {
+            var self = this;
+
+            self.isPrevEnabled = false;
+            self.prevBtnElem.addClass('disabled');
+        },
+
+        enablePrev: function () {
+            var self = this;
+
+            self.isPrevEnabled = true;
+            self.prevBtnElem.removeClass('disabled');
+        },
+
+        disableNext: function () {
+            var self = this;
+
+            self.isNextEnabled = false;
+            self.nextBtnElem.addClass('disabled');
+        },
+
+        enableNext: function () {
+            var self = this;
+
+            self.isNextEnabled = true;
+            self.nextBtnElem.removeClass('disabled');
         },
 
         _init: function () {

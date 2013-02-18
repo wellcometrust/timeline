@@ -109,15 +109,6 @@
                 }
             });
 
-            // help view
-            self.helpView = self.getView('help');
-            self.helpView.timeline_helpView(
-            {
-                onClose: function () {
-                    self._trigger(self.HIDE_HELP_DIALOGUE);
-                }
-            });
-
             // embed view
             self.embedView = self.getView('embed');
             self.embedView.timeline_embedView(

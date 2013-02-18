@@ -44,13 +44,14 @@
             var isHomeDomain = getParameterByName('hd') || false;
             var isOnlyInstance = getParameterByName('oi') || false;
             var uri = getParameterByName('u');
+            var dataUri = getParameterByName('d');
 
             var createTimeline = function () {
 
                 $('#timeline').wellcomeTimeline(
                 {
                     configUri: '/js/config.js',
-                    dataUri: '/sample_data.js',
+                    dataUri: dataUri,
                     uri: uri,
                     isHomeDomain: isHomeDomain,
                     isOnlyInstance: isOnlyInstance,

@@ -121,9 +121,6 @@
             self.overlayMaskElem.width(width);
             self.overlayMaskElem.height(height);
 
-            // position help view
-            self.centerView(height, width, self.helpViewElem);
-
             // position dialogue view
             self.centerView(height, width, self.genericDialogueViewElem);
 
