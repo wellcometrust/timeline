@@ -1,7 +1,7 @@
 function baseProvider() {
     this.options = {
         dataUriTemplate: '{0}{1}.js',
-        embedScriptUri: 'http://library.wellcome.ac.uk/plugins/timeline/embed.js'
+        embedScriptUri: 'js/embed.js'
     };
 
     this.load = function () {

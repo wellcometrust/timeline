@@ -179,7 +179,7 @@
 
             var embedScriptUri = $.wellcome.timeline.options.embedScriptUri;
 
-            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.uri, self.currentWidth, self.currentHeight, embedScriptUri);
+            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, embedScriptUri);
 
             self.codeElem.val(self.code);
         },

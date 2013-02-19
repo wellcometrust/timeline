@@ -42,11 +42,11 @@
             }
 
             for (var i = 0; i < timelines.length; i++) {
-                new Timeline(timelines[i], isHomeDomain, isOnlyInstance);
+                timeline(timelines[i], isHomeDomain, isOnlyInstance);
             }
         });
 
-    function Timeline(element, isHomeDomain, isOnlyInstance) {
+    function timeline(element, isHomeDomain, isOnlyInstance) {
         var socket, $timeline, $timelineFrame, dataUri, isFullScreen, height, top, left;
 
         $timeline = $(element);

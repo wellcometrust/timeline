@@ -493,7 +493,6 @@
         },
 
         updateStackLevelVisibleEvents: function (stackLevel) {
-            var self = this;
 
             for (var i = 0, l = stackLevel.length; i < l; i++) {
 
@@ -549,13 +548,6 @@
                 hiddenElems.fadeOut($.wellcome.timeline.options.eventFadeDuration)).then(function () {
                     callback();
                 });
-        },
-
-        isEventElemVisible: function (index) {
-
-            var evnt = self.events[index];
-
-            return evnt.elem.is(":visible");
         },
 
         getCurrentEvent: function () {
@@ -849,7 +841,6 @@
                 }
             }
 
-            log('refresh');
             self.updateVisibleEvents();
             self.setEventsZIndex();
             self.updateVisibleTicks();
@@ -994,17 +985,13 @@
             }
 
             var intervalWidth = self.getInterval(newTicks.ticks);
+            var marginLeft = parseInt(newTicks.elem.find('.tick').first().css('margin-left'));
+            var tickWidth = intervalWidth - marginLeft;
 
-            var marginLeft = null;
+            //newTicks.elem.find('.tick').width(tickWidth);
 
             for (var i = 0, l = newTicks.ticks.length; i < l; i++) {
-                var tick = newTicks.ticks[i];
-
-                if (!marginLeft) {
-                    marginLeft = parseInt(tick.elem.css('margin-left'));
-                }
-
-                tick.elem.width(intervalWidth - marginLeft);
+                newTicks.ticks[i].elem.width(tickWidth);
             }
         },
 

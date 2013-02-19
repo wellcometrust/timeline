@@ -35,6 +35,7 @@
                 baseUri: self.options.baseUri,
                 timelineId: self.options.timelineId,
                 dataUriTemplate: self.options.dataUriTemplate,
+                dataUri: self.options.dataUri,
                 data: self.data,
                 config: self.config,
                 uri: self.options.uri,
