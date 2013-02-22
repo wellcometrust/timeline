@@ -1,7 +1,8 @@
-wellcomeTimelineProvider.prototype = new baseProvider();
-wellcomeTimelineProvider.prototype.constructor = wellcomeTimelineProvider;
 
-function wellcomeTimelineProvider(options) {
+WellcomeTimelineProvider.prototype = new BaseProvider();
+WellcomeTimelineProvider.prototype.constructor = WellcomeTimelineProvider;
+
+function WellcomeTimelineProvider(options) {
 
     $.extend(this.options, options, {
         provider: this,
@@ -16,14 +17,14 @@ function wellcomeTimelineProvider(options) {
         padding: 0
     });
 
-    this.create = function (options) {
+    this.create = function (opts) {
         var self = this;
 
-        $.extend(self.options, options);
+        $.extend(self.options, opts);
 
         self.load();
 
-        options.element.timeline(self.options);
+        self.options.element.timeline(self.options);
     };
 
     this.getTimelineStartDate = function() {

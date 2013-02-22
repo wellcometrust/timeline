@@ -20,14 +20,14 @@
                 self.close();
             });
 
-            self.smallWidth = 560;
-            self.smallHeight = 420;
+            self.smallWidth = 600;
+            self.smallHeight = 600;
 
-            self.mediumWidth = 640;
-            self.mediumHeight = 480;
+            self.mediumWidth = 800;
+            self.mediumHeight = 600;
 
-            self.largeWidth = 800;
-            self.largeHeight = 600;
+            self.largeWidth = 900;
+            self.largeHeight = 900;
 
             self.currentWidth = self.smallWidth;
             self.currentHeight = self.smallHeight;
@@ -177,7 +177,7 @@
         formatCode: function () {
             var self = this;
 
-            var embedScriptUri = $.wellcome.timeline.options.embedScriptUri;
+            var embedScriptUri = "//" + document.domain + $.wellcome.timeline.options.embedScriptUri;
 
             self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, embedScriptUri);
 

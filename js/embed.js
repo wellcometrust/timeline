@@ -1,45 +1,50 @@
 ﻿
 (function (window, document, version, callback) {
 
-    var domain, j, d;
+    var j, d;
     var loaded = false;
 
-    // This line should be carefully maintained. The hostname here is replaced in the build process. It needs
-    // to match the regex "domain = '([^']+)';" (don't leave domain blank).
-    domain = 'ed-yoga13.internal.digirati.co.uk';
-
     // only load jQuery if not already included in page.
-    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, domain, loaded)) {
+    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, loaded)) {
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "//" + domain + "/js/libs/jquery-1.7.2.min.js";
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
         script.onload = script.onreadystatechange = function () {
             if (!loaded && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
-                callback((j = window.jQuery).noConflict(1), domain, loaded = true);
+                callback((j = window.jQuery).noConflict(1), loaded = true);
                 j(script).remove();
             }
         };
         document.documentElement.childNodes[0].appendChild(script);
     }
-})(window, document, "1.7.2", function ($, domain, jquery_loaded) {
+})(window, document, "1.7.2", function ($, jquery_loaded) {
 
     $.support.cors = true;
 
-    $.when($.getScript('http://' + domain + '/js/libs/easyXDM.min.js'),
-        $.getScript('http://' + domain + '/js/libs/json2.js')).done(function () {
+    // get the script domain.
+    var scripts = document.getElementsByTagName('script');
+    var domain;
+
+    // loop backwards through the loaded scripts until you reach one with a src.
+    // fixes problem in IE when using an empty script with a comment to prevent wordpress wysiwyg editor script-stripping.
+    for (var i = scripts.length - 1; i >= 0; i--) {
+        var script = scripts[i];
+        
+        if (script.src) {
+            var a = document.createElement('a');
+            a.href = script.src;
+            domain = a.hostname;
+            break;
+        }
+    }
+
+    $.when($.getScript('//' + domain + '/js/libs/easyXDM.min.js'),
+        $.getScript('//' + domain + '/js/libs/json2.js')).done(function () {
 
             var timelines = $('.timeline');
 
-            var isHomeDomain = true;
-            var isOnlyInstance = true;
-
-            if (document.domain != domain) {
-                isHomeDomain = false;
-            }
-
-            if (timelines.length > 1) {
-                isOnlyInstance = false;
-            }
+            var isHomeDomain = document.domain === domain;
+            var isOnlyInstance = timelines.length === 1;
 
             for (var i = 0; i < timelines.length; i++) {
                 timeline(timelines[i], isHomeDomain, isOnlyInstance);
