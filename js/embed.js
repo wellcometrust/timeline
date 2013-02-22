@@ -19,6 +19,11 @@
     }
 })(window, document, "1.7.2", function ($, jquery_loaded) {
 
+    // only run this script once per page.
+    if (window.wellcomeTimelineScriptIncluded) return;
+
+    window.wellcomeTimelineScriptIncluded = true;
+
     $.support.cors = true;
 
     // get the script domain.
