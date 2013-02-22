@@ -557,10 +557,8 @@
         updateVisibleTicks: function () {
             var self = this;
 
-            var currentTicks = self.getCurrentTicks();
-
-            for (var i = 0, l = currentTicks.ticks.length; i < l; i++) {
-                var tick = currentTicks.ticks[i];
+            for (var i = 0, l = self.currentTicks.ticks.length; i < l; i++) {
+                var tick = self.currentTicks.ticks[i];
 
                 // for each tick, check if its event is visible
                 // and set tickevent class to hidden if not.
@@ -602,23 +600,12 @@
             }
         },
 
-        getCurrentTicks: function () {
-            var self = this;
-
-            if (self.yearTicks.elem && self.yearTicks.elem.is(':visible')) return self.yearTicks;
-            if (self.decadeTicks.elem && self.decadeTicks.elem.is(':visible')) return self.decadeTicks;
-            if (self.centuryTicks.elem && self.centuryTicks.elem.is(':visible')) return self.centuryTicks;
-            return null;
-        },
-
         // get the current tickEventElem for a given event.
         getTickEventElem: function (evnt) {
             var self = this;
 
-            var currentTicks = self.getCurrentTicks();
-
-            for (var i = 0, l = currentTicks.ticks.length; i < l; i++) {
-                var tick = currentTicks.ticks[i];
+            for (var i = 0, l = self.currentTicks.ticks.length; i < l; i++) {
+                var tick = self.currentTicks.ticks[i];
 
                 var tickEventElems = tick.elem.find('.tickEvent');
 
@@ -937,14 +924,15 @@
                     'top': evnt.top
                 });
 
-                if (evnt.lineHeight) continue;
+                if (!evnt.lineHeight) {
 
-                // line height hasn't been computed yet.
-                var lineElem = evnt.elem.find('.line');
+                    // line height hasn't been computed yet.
+                    var lineElem = evnt.elem.find('.line');
 
-                evnt.lineHeight = self.eventsElem.height() - evnt.top - parseInt(evnt.elem.css('margin-top')) - parseInt(evnt.elem.height()) - (evnt.isPresent ? 9 : 7); // -7 is to make small gap above ticks bar
+                    evnt.lineHeight = self.eventsElem.height() - evnt.top - parseInt(evnt.elem.css('margin-top')) - parseInt(evnt.elem.height()) - (evnt.isPresent ? 9 : 7); // -7 is to make small gap above ticks bar
 
-                lineElem.height(evnt.lineHeight);
+                    lineElem.height(evnt.lineHeight);
+                }
             }
         },
 
@@ -965,9 +953,13 @@
                 newTicks = self.decadeTicks;
             }
 
-            if (newTicks !== self.getCurrentTicks()) {
+            if (newTicks !== self.currentTicks) {
 
-                self.timeElem.find('.ticks').hide();
+                if (self.currentTicks != null) {
+                    self.currentTicks.elem.hide();
+                }
+
+                self.currentTicks = newTicks;
 
                 // update current ticks.
                 switch (newTicks) {
@@ -984,9 +976,10 @@
 
             }
 
-            var intervalWidth = self.getInterval(newTicks.ticks);
-            var marginLeft = parseInt(newTicks.elem.find('.tick').first().css('margin-left'));
-            var tickWidth = intervalWidth - marginLeft;
+            var intervalWidth = availableWidth / newTicks.ticks.length;
+
+            if (!self.tickMargin) self.tickMargin = parseInt(newTicks.elem.find('.tick').first().css('margin-left'));
+            var tickWidth = intervalWidth - self.tickMargin;
 
             //newTicks.elem.find('.tick').width(tickWidth);
 
@@ -1122,13 +1115,6 @@
             }
 
             return maxWidth;
-        },
-
-        // gets the number of pixels between each tick.
-        getInterval: function (ticks) {
-            var self = this;
-
-            return self.getContentWidth() / ticks.length;
         },
 
         getContentWidth: function () {
