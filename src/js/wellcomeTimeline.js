@@ -15,9 +15,9 @@
                 self.config = config;
 
                 // load data.
-                $.getJSON(self.options.dataUri, function(data) {
+                $.getJSON(self.options.dataUri, function (data) {
                     self.data = data;
-                    
+
                     self.viewPackage();
                 });
             });

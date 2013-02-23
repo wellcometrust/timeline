@@ -1,30 +1,10 @@
 ﻿
 (function (window, document, version, callback) {
 
-    var j, d;
-    var loaded = false;
-
-    // only load jQuery if not already included in page.
-    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, loaded)) {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
-        script.onload = script.onreadystatechange = function () {
-            if (!loaded && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
-                callback((j = window.jQuery).noConflict(1), loaded = true);
-                j(script).remove();
-            }
-        };
-        document.documentElement.childNodes[0].appendChild(script);
-    }
-})(window, document, "1.7.2", function ($, jquery_loaded) {
-
     // only run this script once per page.
     if (window.wellcomeTimelineScriptIncluded) return;
 
     window.wellcomeTimelineScriptIncluded = true;
-
-    $.support.cors = true;
 
     // get the script domain.
     var scripts = document.getElementsByTagName('script');
@@ -33,18 +13,38 @@
     // loop backwards through the loaded scripts until you reach one with a src.
     // fixes problem in IE when using an empty script with a comment to prevent wordpress wysiwyg editor script-stripping.
     for (var i = scripts.length - 1; i >= 0; i--) {
-        var script = scripts[i];
+        var s = scripts[i];
         
-        if (script.src) {
+        if (s.src) {
             var a = document.createElement('a');
-            a.href = script.src;
+            a.href = s.src;
             domain = a.hostname;
             break;
         }
     }
+    
+    var j, d;
+    var loaded = false;
+
+    // only load jQuery if not already included in page.
+    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, domain, loaded)) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
+        script.onload = script.onreadystatechange = function () {
+            if (!loaded && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
+                callback((j = window.jQuery).noConflict(1), domain, loaded = true);
+                j(script).remove();
+            }
+        };
+        document.documentElement.childNodes[0].appendChild(script);
+    }
+})(window, document, "1.7.2", function ($, domain, jqueryLoaded) {
+
+    $.support.cors = true;
 
     $.when($.getScript('//' + domain + '/js/libs/easyXDM.min.js'),
-        $.getScript('//' + domain + '/js/libs/json2.js')).done(function () {
+        $.getScript('//' + domain + '/js/libs/json2.min.js')).done(function () {
 
             var timelines = $('.timeline');
 
