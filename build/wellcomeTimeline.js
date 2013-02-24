@@ -1,3 +1,4 @@
+//a7c6e54517bd181a88a370c13cb9a3211bfaf559 - Sun Feb 24 12:40:44 2013 +0000
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
@@ -2118,20 +2119,6 @@ function WellcomeTimelineProvider(options) {
 
             $.wellcome.timeline.isMinZoom = self.isMinZoom();
             $.wellcome.timeline.isMaxZoom = self.isMaxZoom();
-
-            /*
-            if (self.isMinZoom()) {
-                $.wellcome.timeline.isMinZoom = true;
-            } else {
-                $.wellcome.timeline.isMinZoom = false;
-            }
-
-            if (self.isMaxZoom()) {
-                $.wellcome.timeline.isMaxZoom = true;
-            } else {
-                $.wellcome.timeline.isMaxZoom = false;
-            }
-            */
         },
 
         // decide which events are visible.

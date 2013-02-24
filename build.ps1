@@ -1,6 +1,9 @@
 
-# Initialise paths
+# Get last commit hash and date
+$commitComment = "//"
+$commitComment += git log --pretty=format:"%H - %ad" -1
 
+# Initialise paths
 $path = $MyInvocation.MyCommand.Path
 $parentDir = $path.Remove($path.LastIndexOf("\"))
 
@@ -8,14 +11,22 @@ $cmplPath = "C:\Temp\google-closure\compiler.jar"
 $srcPath = $parentDir + "\src\"
 $bldPath = $parentDir + "\build\"
 
+# Minify embed.js
 Write-Host "---- minify embed.js ---- `n"
 
 $embedSrc = $srcPath + "js\embed.js"
 $embedBuild = $bldPath + "embed.min.js"
-java -jar $cmplPath --js $embedSrc --js_output_file $embedBuild
+
+New-Item $embedBuild -type file -force | out-null
+
+$minifiedResult = java -jar $cmplPath --js $embedSrc
+$minifiedResult = $commitComment + "`n" + $minifiedResult
+
+Add-Content $embedBuild $minifiedResult
 
 Write-Host "complete `n"
 
+# Combine timeline scripts
 Write-Host "---- combine scripts ---- `n"
 
 $combinedPath = $bldPath + "wellcomeTimeline.js"
@@ -42,6 +53,8 @@ $files += $srcPath + "js\genericDialogueView.js"
 $files += $srcPath + "js\embedView.js"
 $files += $srcPath + "js\detailsView.js"
 
+Add-Content $combinedPath $commitComment
+
 foreach($file in $files){
     $item = Get-Item $file
     $fileContent = Get-Content $item
@@ -52,12 +65,16 @@ foreach($file in $files){
 Write-Host "`r"
 Write-Host "complete `n"
 
+# Minify combined timeline scripts
 Write-Host "---- minify combined scripts ---- `n"
 
-java -jar $cmplPath --js $combinedPath --js_output_file $minifiedPath
+$minifiedResult = java -jar $cmplPath --js $combinedPath
+$minifiedResult = $commitComment + "`n" + $minifiedResult
+Add-Content $minifiedPath $minifiedResult
 
 Write-Host "complete `n"
 
+# Minify any further third party scripts (optional)
 Write-Host "---- minify third-party scripts ---- `n"
 
 <#
@@ -70,6 +87,6 @@ foreach($lib in $libs){
 }
 #>
 
-Write-Host "build complete :-) `n"
+Write-Host "build complete `n"
 
 pause
