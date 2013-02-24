@@ -10,7 +10,7 @@
     var scripts = document.getElementsByTagName('script');
     var domain;
 
-    // loop backwards through the loaded scripts until you reach one with a src.
+    // loop backwards through the loaded scripts until you reach last one with a src.
     // fixes problem in IE when using an empty script with a comment to prevent wordpress wysiwyg editor script-stripping.
     for (var i = scripts.length - 1; i >= 0; i--) {
         var s = scripts[i];
@@ -97,8 +97,6 @@
         }
 
         function redirect(uri) {
-            // store current location in cookie.
-            jQuery.cookie('wlredirect', window.location.href, { path: '/' });
             window.location.replace(uri);
         }
 
