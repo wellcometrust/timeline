@@ -36,7 +36,8 @@
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_INDEX_CHANGE, function (e, index) {
-                self.navigateToEvent(index);
+                if (index == -1) return;
+                self.navigateToEvent(self.events[index]);
             });
 
             // create ui.
@@ -614,17 +615,15 @@
             return null;
         },
         
-        navigateToEvent: function (index) {
+        navigateToEvent: function (evnt) {
             var self = this;
-
-            if (index == -1) return;
 
             self.isNavigating = true;
             self._trigger('onStartNavigating');
 
             // get the target scroll position.
             var currentScroll = Math.floor((self.getContentWidth() * self.getCurrentScrollPosition()));
-            var targetScroll = self.getEventScrollPosition(index);
+            var targetScroll = self.getEventScrollPosition(evnt.index);
 
             var direction;
 
@@ -662,12 +661,12 @@
                 complete: function () {
                     self._trigger('onFinishScroll', null, direction.toString());
                     // scrolled into position, now zoom until visible.
-                    self.zoomUntilVisible(index, function() {
+                    self.zoomUntilVisible(evnt, function () {
                         self.refresh(function () {
                             self.isNavigating = false;
                             self._trigger('onFinishNavigating');
                             self._trigger('onFinishZoom');
-                            self._trigger('onSelectEventComplete', null, index);
+                            self._trigger('onSelectEventComplete', null, evnt.index);
                         });
                     });
                 }
@@ -694,10 +693,8 @@
             });
         },
 
-        zoomUntilVisible: function (index, callback) {
+        zoomUntilVisible: function (evnt, callback) {
             var self = this;
-
-            var evnt = self.events[index];
 
             if (evnt.isVisible) {
                 callback();
@@ -712,7 +709,7 @@
                 }
 
                 self.zoom(1, function () {
-                    self.zoomUntilVisible(index, callback);
+                    self.zoomUntilVisible(evnt, callback);
                 });
             });
         },
