@@ -113,7 +113,7 @@
                 self.currentWidth = self.smallWidth;
                 self.currentHeight = self.smallHeight;
 
-                self.formatCode();
+                self._formatCode();
             });
 
             self.mediumSizeElem.click(function (e) {
@@ -122,7 +122,7 @@
                 self.currentWidth = self.mediumWidth;
                 self.currentHeight = self.mediumHeight;
 
-                self.formatCode();
+                self._formatCode();
             });
 
             self.largeSizeElem.click(function (e) {
@@ -131,7 +131,7 @@
                 self.currentWidth = self.largeWidth;
                 self.currentHeight = self.largeHeight;
 
-                self.formatCode();
+                self._formatCode();
             });
 
             self.smallSizeElem.addClass('selected');
@@ -148,7 +148,7 @@
             });
 
             self.customWidthElem.keyup(function (event) {
-                self.getCustomSize();
+                self._getCustomSize();
             });
 
             self.customHeightElem.keydown(function (event) {
@@ -156,25 +156,25 @@
             });
 
             self.customHeightElem.keyup(function (event) {
-                self.getCustomSize();
+                self._getCustomSize();
             });
 
-            self.formatCode();
+            self._formatCode();
 
             // hide
             self.element.hide();
         },
 
-        getCustomSize: function () {
+        _getCustomSize: function () {
             var self = this;
 
             self.currentWidth = self.customWidthElem.val();
             self.currentHeight = self.customHeightElem.val();
 
-            self.formatCode();
+            self._formatCode();
         },
 
-        formatCode: function () {
+        _formatCode: function () {
             var self = this;
 
             self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, $.wellcome.timeline.options.embedScriptUri);
@@ -182,7 +182,7 @@
             self.codeElem.val(self.code);
         },
 
-        resize: function () {
+        _resize: function () {
         },
 
         _init: function () {

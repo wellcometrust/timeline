@@ -19,12 +19,12 @@
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
-                self.disablePrev();
-                self.disableNext();
+                self._disablePrev();
+                self._disableNext();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_ZOOM, function () {
-                self.refresh();
+                self._refresh();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_NAVIGATING, function (e, direction) {
@@ -44,13 +44,13 @@
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
-                self.disablePrev();
-                self.disableNext();
-                self.prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
+                self._disablePrev();
+                self._disableNext();
+                self._prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.SCROLL_STEP, function (e, obj) {
-                self.scroll(parseInt(obj.direction), obj.pos);
+                self._scroll(parseInt(obj.direction), obj.pos);
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_SCROLL, function (e, direction) {
@@ -94,17 +94,17 @@
                 if (self.isPrevEnabled) {
                     // if at the first event, show intro.
                     if ($.wellcome.timeline.currentIndex == 0) {
-                        self.prepEvent(-1, self.events[0]);
+                        self._prepEvent(-1, self.events[0]);
 
                         $({ val: 0 }).animate({ val: 1 }, {
                             duration: 500,
                             easing: 'easeInOutCubic',
                             step: function () {
-                                self.scroll(1, this.val);
+                                self._scroll(1, this.val);
                             },
                             complete: function () {
                                 self.currentDetailsElem = self.nextDetailsElem;
-                                self.refresh();
+                                self._refresh();
 
                             }
                         });
@@ -127,13 +127,13 @@
             // add intro to start.
             self.events.unshift($.wellcome.timeline.provider.data);
 
-            self.prepEvent(0, self.events[0]);
+            self._prepEvent(0, self.events[0]);
             self.currentDetailsElem = self.nextDetailsElem;
-            self.refresh();
+            self._refresh();
             self.open();
         },
 
-        refresh: function () {
+        _refresh: function () {
             var self = this;
 
             if (self.isNavigating) return;
@@ -141,9 +141,9 @@
             var currentIndex = $.wellcome.timeline.currentIndex;
 
             if (currentIndex == -1) {
-                self.disablePrev();
+                self._disablePrev();
             } else {
-                self.enablePrev();
+                self._enablePrev();
             }
 
             var length = $.wellcome.timeline.provider.data.Events.length;
@@ -153,13 +153,13 @@
             }
 
             if (currentIndex == length - 1) {
-                self.disableNext();
+                self._disableNext();
             } else {
-                self.enableNext();
+                self._enableNext();
             }
         },
 
-        resize: function() {
+        _resize: function() {
             var self = this;
 
             var $win = $(window);
@@ -192,7 +192,7 @@
             self.centerRightColElem.width(centerRightColWidth);
         },
 
-        prepEvent: function (direction, evnt) {
+        _prepEvent: function (direction, evnt) {
             var self = this;
 
             self.nextDetailsElem = self.detailsTemplate.clone();
@@ -249,10 +249,10 @@
             self.centerLeftColElem = self.nextDetailsElem.find('.centerLeftCol');
             self.centerRightColElem = self.nextDetailsElem.find('.centerRightCol');
 
-            self.resize();
+            self._resize();
         },
 
-        scroll: function (direction, pos) {
+        _scroll: function (direction, pos) {
             var self = this;
 
             // if there's a current details element, move it out of the way
@@ -270,28 +270,28 @@
             }
         },
 
-        disablePrev: function () {
+        _disablePrev: function () {
             var self = this;
 
             self.isPrevEnabled = false;
             self.prevBtnElem.addClass('disabled');
         },
 
-        enablePrev: function () {
+        _enablePrev: function () {
             var self = this;
 
             self.isPrevEnabled = true;
             self.prevBtnElem.removeClass('disabled');
         },
 
-        disableNext: function () {
+        _disableNext: function () {
             var self = this;
 
             self.isNextEnabled = false;
             self.nextBtnElem.addClass('disabled');
         },
 
-        enableNext: function () {
+        _enableNext: function () {
             var self = this;
 
             self.isNextEnabled = true;

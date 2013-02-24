@@ -18,15 +18,15 @@
                 $.getJSON(self.options.dataUri, function (data) {
                     self.data = data;
 
-                    self.viewPackage();
+                    self._viewPackage();
                 });
             });
         },
 
-        viewPackage: function () {
+        _viewPackage: function () {
             var self = this;
 
-            self.reset();
+            self._reset();
 
             //self.getParams();
 
@@ -45,7 +45,7 @@
             });
         },
 
-        reset: function () {
+        _reset: function () {
             var self = this;
 
             self.element.empty();

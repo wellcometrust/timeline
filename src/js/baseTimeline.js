@@ -43,7 +43,7 @@
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.ESCAPE, function () {
                 if (self.isFullScreen) {
-                    self.toggleFullScreen();
+                    self._toggleFullScreen();
                 }
             });
 
@@ -57,7 +57,7 @@
 
             // ui event handlers.
             $(window).resize(function () {
-                self.resize();
+                self._resize();
             });
 
             // track unload
@@ -88,7 +88,7 @@
             if (index > self.provider.data.Events.length - 1) return;
 
             self.lastIndex = self.currentIndex;
-            self.deselectCurrentEvent();
+            self._deselectCurrentEvent();
             self.currentIndex = index;
 
             self._trigger(self.START_INDEX_CHANGE, index);
@@ -133,7 +133,7 @@
             }
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             if (self.options.enforceMinWidth) {
@@ -157,7 +157,7 @@
             return self.options.config.Settings.EmbedEnabled !== "false";
         },
 
-        toggleFullScreen: function () {
+        _toggleFullScreen: function () {
             var self = this;
 
             self.isFullScreen = !self.isFullScreen;

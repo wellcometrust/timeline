@@ -73,7 +73,7 @@
             self.footerPanelView.timeline_footerPanelView(
             {
                 onToggleFullScreen: function () {
-                    self.toggleFullScreen();
+                    self._toggleFullScreen();
                 },
                 onEmbed: function () {
                     self.embed();
@@ -85,7 +85,7 @@
             self.detailsView.timeline_detailsView(
             {
                 onClose: function () {
-                    self.deselectCurrentEvent();
+                    self._deselectCurrentEvent();
                     self._trigger(self.HIDE_EVENT_DETAILS_DIALOGUE);
                 },
                 onSelectPrev: function () {
@@ -122,16 +122,10 @@
             });
 
             // initial positioning.
-            self.resize();
+            self._resize();
         },
 
-        isDetailsPanelVisible: function () {
-            var self = this;
-
-            return self.detailsView.is(':visible');
-        },
-
-        deselectCurrentEvent: function () {
+        _deselectCurrentEvent: function () {
             var self = this;
 
             self.currentIndex = -1;

@@ -18,7 +18,7 @@
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.SHOW_EVENT_DETAILS_DIALOGUE, function () {
@@ -81,7 +81,7 @@
             });
         },
 
-        toggleFullScreen: function () {
+        _toggleFullScreen: function () {
             var self = this;
 
             var $win = $(window);
@@ -89,7 +89,7 @@
             self.containerElem.height($win.height());
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             var $win = $(window);
@@ -122,7 +122,7 @@
             self.overlayMaskElem.height(height);
 
             // position dialogue view
-            self.centerView(height, width, self.genericDialogueViewElem);
+            self._centerView(height, width, self.genericDialogueViewElem);
 
             // position embed view
             self.embedViewElem.css({
@@ -130,7 +130,7 @@
             });
         },
 
-        centerView: function (height, width, view) {
+        _centerView: function (height, width, view) {
             view.css({
                 top: (height / 2) - (view.height() / 2),
                 left: (width / 2) - (view.width() / 2)

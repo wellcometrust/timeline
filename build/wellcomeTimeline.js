@@ -1,4 +1,4 @@
-// 12eab1b - 2013-02-24
+// 2fef14c - 2013-02-24
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
@@ -967,7 +967,7 @@ function WellcomeTimelineProvider(options) {
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.ESCAPE, function () {
                 if (self.isFullScreen) {
-                    self.toggleFullScreen();
+                    self._toggleFullScreen();
                 }
             });
 
@@ -981,7 +981,7 @@ function WellcomeTimelineProvider(options) {
 
             // ui event handlers.
             $(window).resize(function () {
-                self.resize();
+                self._resize();
             });
 
             // track unload
@@ -1012,7 +1012,7 @@ function WellcomeTimelineProvider(options) {
             if (index > self.provider.data.Events.length - 1) return;
 
             self.lastIndex = self.currentIndex;
-            self.deselectCurrentEvent();
+            self._deselectCurrentEvent();
             self.currentIndex = index;
 
             self._trigger(self.START_INDEX_CHANGE, index);
@@ -1057,7 +1057,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             if (self.options.enforceMinWidth) {
@@ -1081,7 +1081,7 @@ function WellcomeTimelineProvider(options) {
             return self.options.config.Settings.EmbedEnabled !== "false";
         },
 
-        toggleFullScreen: function () {
+        _toggleFullScreen: function () {
             var self = this;
 
             self.isFullScreen = !self.isFullScreen;
@@ -1140,15 +1140,15 @@ function WellcomeTimelineProvider(options) {
                 $.getJSON(self.options.dataUri, function (data) {
                     self.data = data;
 
-                    self.viewPackage();
+                    self._viewPackage();
                 });
             });
         },
 
-        viewPackage: function () {
+        _viewPackage: function () {
             var self = this;
 
-            self.reset();
+            self._reset();
 
             //self.getParams();
 
@@ -1167,7 +1167,7 @@ function WellcomeTimelineProvider(options) {
             });
         },
 
-        reset: function () {
+        _reset: function () {
             var self = this;
 
             self.element.empty();
@@ -1256,7 +1256,7 @@ function WellcomeTimelineProvider(options) {
             self.footerPanelView.timeline_footerPanelView(
             {
                 onToggleFullScreen: function () {
-                    self.toggleFullScreen();
+                    self._toggleFullScreen();
                 },
                 onEmbed: function () {
                     self.embed();
@@ -1268,7 +1268,7 @@ function WellcomeTimelineProvider(options) {
             self.detailsView.timeline_detailsView(
             {
                 onClose: function () {
-                    self.deselectCurrentEvent();
+                    self._deselectCurrentEvent();
                     self._trigger(self.HIDE_EVENT_DETAILS_DIALOGUE);
                 },
                 onSelectPrev: function () {
@@ -1305,16 +1305,10 @@ function WellcomeTimelineProvider(options) {
             });
 
             // initial positioning.
-            self.resize();
+            self._resize();
         },
 
-        isDetailsPanelVisible: function () {
-            var self = this;
-
-            return self.detailsView.is(':visible');
-        },
-
-        deselectCurrentEvent: function () {
+        _deselectCurrentEvent: function () {
             var self = this;
 
             self.currentIndex = -1;
@@ -1367,7 +1361,7 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.SHOW_EVENT_DETAILS_DIALOGUE, function () {
@@ -1430,7 +1424,7 @@ function WellcomeTimelineProvider(options) {
             });
         },
 
-        toggleFullScreen: function () {
+        _toggleFullScreen: function () {
             var self = this;
 
             var $win = $(window);
@@ -1438,7 +1432,7 @@ function WellcomeTimelineProvider(options) {
             self.containerElem.height($win.height());
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             var $win = $(window);
@@ -1471,7 +1465,7 @@ function WellcomeTimelineProvider(options) {
             self.overlayMaskElem.height(height);
 
             // position dialogue view
-            self.centerView(height, width, self.genericDialogueViewElem);
+            self._centerView(height, width, self.genericDialogueViewElem);
 
             // position embed view
             self.embedViewElem.css({
@@ -1479,7 +1473,7 @@ function WellcomeTimelineProvider(options) {
             });
         },
 
-        centerView: function (height, width, view) {
+        _centerView: function (height, width, view) {
             view.css({
                 top: (height / 2) - (view.height() / 2),
                 left: (width / 2) - (view.width() / 2)
@@ -1518,21 +1512,21 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
-                self.disableZoomIn();
-                self.disableZoomOut();
+                self._disableZoomIn();
+                self._disableZoomOut();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_ZOOM, function () {
-                self.refresh();
+                self._refresh();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
-                self.disableZoomIn();
-                self.disableZoomOut();
+                self._disableZoomIn();
+                self._disableZoomOut();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_NAVIGATING, function (e, direction) {
@@ -1544,7 +1538,7 @@ function WellcomeTimelineProvider(options) {
             });
             
             $.wellcome.timeline.bind($.wellcome.timeline.REFRESHED, function () {
-                self.refresh();
+                self._refresh();
             });
 
             // create ui.
@@ -1594,35 +1588,35 @@ function WellcomeTimelineProvider(options) {
             });
         },
 
-        disableZoomIn: function () {
+        _disableZoomIn: function () {
             var self = this;
 
             self.isZoomInEnabled = false;
             self.zoomInButtonElem.fadeTo(0, 0.5);
         },
 
-        enableZoomIn: function () {
+        _enableZoomIn: function () {
             var self = this;
 
             self.isZoomInEnabled = true;
             self.zoomInButtonElem.fadeTo(0, 1);
         },
 
-        disableZoomOut: function () {
+        _disableZoomOut: function () {
             var self = this;
 
             self.isZoomOutEnabled = false;
             self.zoomOutButtonElem.fadeTo(0, 0.5);
         },
 
-        enableZoomOut: function () {
+        _enableZoomOut: function () {
             var self = this;
 
             self.isZoomOutEnabled = true;
             self.zoomOutButtonElem.fadeTo(0, 1);
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             var availWidth = self.element.width() - self.rightColElem.width();
@@ -1632,21 +1626,21 @@ function WellcomeTimelineProvider(options) {
             self.titleElem.ellipsisFill(self.title);
         },
 
-        refresh: function () {
+        _refresh: function () {
             var self = this;
 
             if (self.isNavigating) return;
 
             if ($.wellcome.timeline.isMinZoom) {
-                self.disableZoomOut();
+                self._disableZoomOut();
             } else {
-                self.enableZoomOut();
+                self._enableZoomOut();
             }
 
             if ($.wellcome.timeline.isMaxZoom) {
-                self.disableZoomIn();
+                self._disableZoomIn();
             } else {
-                self.enableZoomIn();
+                self._enableZoomIn();
             }
         },
 
@@ -1685,20 +1679,20 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.ZOOM_IN, function () {
-                self.zoomIn();
+                self._zoomIn();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.ZOOM_OUT, function () {
-                self.zoomOut();
+                self._zoomOut();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_INDEX_CHANGE, function (e, index) {
                 if (index == -1) return;
-                self.navigateToEvent(self.events[index]);
+                self._navigateToEvent(self.events[index]);
             });
 
             // create ui.
@@ -1787,16 +1781,16 @@ function WellcomeTimelineProvider(options) {
             } else if (endDate.year() - startDate.year() < 100) {
                 // if less than a century, pick the first day of the first decade and the last day of
                 // the last decade as the start and end dates.
-                var startDecade = self.getDecade(startDate);
+                var startDecade = self._getDecade(startDate);
                 startDate = moment(new Date(startDecade, 1, 1));
-                var endDecade = self.getDecade(endDate);
+                var endDecade = self._getDecade(endDate);
                 endDate = moment(new Date(endDecade, 1, 1)).add('years', 10).subtract('days', 1);
             } else {
                 // if more than a century, pick the first day of the first century and the last day
                 // of the last century as the start and end dates
-                var startCentury = self.getCentury(startDate);
+                var startCentury = self._getCentury(startDate);
                 startDate = moment(new Date(startCentury, 1, 1));
-                var endCentury = self.getCentury(endDate);
+                var endCentury = self._getCentury(endDate);
                 endDate = moment(new Date(endCentury, 1, 1)).add('years', 100).subtract('days', 1);
             }
 
@@ -1808,12 +1802,12 @@ function WellcomeTimelineProvider(options) {
             self.decades = Math.floor(self.years / 10);
             self.centuries = Math.floor(self.years / 100);
 
-            self.createBackgroundEvents();
-            self.createEvents();
-            self.createTicks();
+            self._createBackgroundEvents();
+            self._createEvents();
+            self._createTicks();
         },
 
-        createBackgroundEvents: function () {
+        _createBackgroundEvents: function () {
             var self = this;
 
             var i, l, evnt;
@@ -1846,7 +1840,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        createEvents: function () {
+        _createEvents: function () {
             var self = this;
             var i, l, evnt;
 
@@ -1902,21 +1896,21 @@ function WellcomeTimelineProvider(options) {
                         if (self.isNavigating || self.isZooming) return;
 
                         var index = parseInt($(this).data('index'));
-                        self.selectEvent(index);
+                        self._selectEvent(index);
                     });
 
                     elem.on('mouseenter', function () {
                         if (self.isNavigating || self.isZooming) return;
 
                         var index = $(this).data('index');
-                        self.highlightEvent(index);
+                        self._highlightEvent(index);
                     });
 
                     elem.on('mouseleave', function () {
                         if (self.isNavigating || self.isZooming) return;
 
                         var index = $(this).data('index');
-                        self.unhighlightEvent(index);
+                        self._unhighlightEvent(index);
                     });
 
                     $.wellcome.timeline.provider.setEventStartDate(evnt);
@@ -1956,7 +1950,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        createTicks: function () {
+        _createTicks: function () {
             var self = this;
 
             var i, l, tick;
@@ -1964,43 +1958,43 @@ function WellcomeTimelineProvider(options) {
             // 1 year is the minimum timespan.
             for (i = self.startDate.year(), l = self.endDate.year(); i < l; i++) {
                 tick = { startYear: i, endYear: i };
-                self.associateEventsWithTick(tick);
+                self._associateEventsWithTick(tick);
                 self.yearTicks.ticks.push(tick);
             }
 
             self.yearTicks.elem = self.yearTicksElem;
-            self.createTickElems(self.yearTicks);
+            self._createTickElems(self.yearTicks);
 
             // if there are decades, create decade ticks.
             if (self.decades) {
-                var startDecade = self.getDecade(self.startDate);
-                var endDecade = self.getDecade(self.endDate);
+                var startDecade = self._getDecade(self.startDate);
+                var endDecade = self._getDecade(self.endDate);
                 for (i = startDecade, l = endDecade; i < l; i += 10) {
                     tick = { startYear: i, endYear: i + 9 };
-                    self.associateEventsWithTick(tick);
+                    self._associateEventsWithTick(tick);
                     self.decadeTicks.ticks.push(tick);
                 }
 
                 self.decadeTicks.elem = self.decadeTicksElem;
-                self.createTickElems(self.decadeTicks);
+                self._createTickElems(self.decadeTicks);
             }
 
             // if there are centuries, create century ticks.
             if (self.centuries) {
-                var startCentury = self.getCentury(self.startDate);
-                var endCentury = self.getCentury(self.endDate);
+                var startCentury = self._getCentury(self.startDate);
+                var endCentury = self._getCentury(self.endDate);
                 for (i = startCentury, l = endCentury; i < l; i += 100) {
                     tick = { startYear: i, endYear: i + 99 };
-                    self.associateEventsWithTick(tick);
+                    self._associateEventsWithTick(tick);
                     self.centuryTicks.ticks.push(tick);
                 }
 
                 self.centuryTicks.elem = self.centuryTicksElem;
-                self.createTickElems(self.centuryTicks);
+                self._createTickElems(self.centuryTicks);
             }
         },
 
-        createTickElems: function (ticksType) {
+        _createTickElems: function (ticksType) {
             var self = this;
 
             for (var i = 0, l = ticksType.ticks.length; i < l; i++) {
@@ -2025,21 +2019,21 @@ function WellcomeTimelineProvider(options) {
                         if (self.isNavigating || self.isZooming) return;
 
                         var index = $(this).data('index');
-                        self.selectEvent(index);
+                        self._selectEvent(index);
                     });
 
                     tickEventElem.on('mouseenter', function () {
                         if (self.isNavigating || self.isZooming) return;
 
                         var index = $(this).data('index');
-                        self.highlightEvent(index);
+                        self._highlightEvent(index);
                     });
 
                     tickEventElem.on('mouseleave', function () {
                         if (self.isNavigating || self.isZooming) return;
 
                         var index = $(this).data('index');
-                        self.unhighlightEvent(index);
+                        self._unhighlightEvent(index);
                     });
 
                     eventsElem.append(tickEventElem);
@@ -2049,7 +2043,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        associateEventsWithTick: function (tick) {
+        _associateEventsWithTick: function (tick) {
             var self = this;
 
             tick.events = [];
@@ -2068,7 +2062,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        setEventsZIndex: function (stackLevel) {
+        _setEventsZIndex: function (stackLevel) {
             var self = this;
 
             // set zIndex, top stack is furthest back.
@@ -2077,15 +2071,15 @@ function WellcomeTimelineProvider(options) {
 
                 if (stackLevel != null) {
                     if (evnt.stackLevel == stackLevel) {
-                        self.setEventZIndex(evnt);
+                        self._setEventZIndex(evnt);
                     }
                 } else {
-                    self.setEventZIndex(evnt);
+                    self._setEventZIndex(evnt);
                 }
             }
         },
 
-        setEventZIndex: function (evnt) {
+        _setEventZIndex: function (evnt) {
             var self = this;
 
             var z = parseInt(self.eventsElem.css('zIndex')) + (evnt.stackLevel * 2) + 1;
@@ -2093,35 +2087,35 @@ function WellcomeTimelineProvider(options) {
             evnt.elem.css('zIndex', z);
         },
 
-        setCurrentEventToTop: function () {
+        _setCurrentEventToTop: function () {
             var self = this;
 
-            if (self.getCurrentEvent()) {
-                self.setEventToTop(self.getCurrentEvent());
+            if (self._getCurrentEvent()) {
+                self._setEventToTop(self._getCurrentEvent());
             }
         },
 
-        setEventToTop: function (evnt) {
+        _setEventToTop: function (evnt) {
             var self = this;
 
             // reset all event zindexes for this
             // stack level and increase the passed event's zindex.
-            self.setEventsZIndex(evnt.stackLevel);
+            self._setEventsZIndex(evnt.stackLevel);
 
             var z = parseInt(evnt.elem.css('zIndex')) + 1;
 
             evnt.elem.css('zIndex', z);
         },
 
-        updateNavigationAvailability: function () {
+        _updateNavigationAvailability: function () {
             var self = this;
 
-            $.wellcome.timeline.isMinZoom = self.isMinZoom();
-            $.wellcome.timeline.isMaxZoom = self.isMaxZoom();
+            $.wellcome.timeline.isMinZoom = self._isMinZoom();
+            $.wellcome.timeline.isMaxZoom = self._isMaxZoom();
         },
 
         // decide which events are visible.
-        updateVisibleEvents: function () {
+        _updateVisibleEvents: function () {
             var self = this;
 
             var i, l, evnt;
@@ -2134,18 +2128,18 @@ function WellcomeTimelineProvider(options) {
 
             // if not at max zoom,  keep all visible.
             // otherwise, only show events that don't overlap.
-            if (self.isMaxZoom()) return;
+            if (self._isMaxZoom()) return;
 
             // from left to right for each event stack level, update
             // event visibility.
             for (i = 0, l = self.eventStack.length; i < l; i++) {
                 var stackLevel = self.eventStack[i];
 
-                self.updateStackLevelVisibleEvents(stackLevel);
+                self._updateStackLevelVisibleEvents(stackLevel);
             }
         },
 
-        updateStackLevelVisibleEvents: function (stackLevel) {
+        _updateStackLevelVisibleEvents: function (stackLevel) {
 
             for (var i = 0, l = stackLevel.length; i < l; i++) {
 
@@ -2181,7 +2175,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        showVisibleEvents: function (callback) {
+        _showVisibleEvents: function (callback) {
             var self = this;
 
             var visibleElems = $();
@@ -2203,11 +2197,11 @@ function WellcomeTimelineProvider(options) {
                 });
         },
 
-        getCurrentEvent: function () {
+        _getCurrentEvent: function () {
             return $.wellcome.timeline.getCurrentEvent();
         },
 
-        updateVisibleTicks: function () {
+        _updateVisibleTicks: function () {
             var self = this;
 
             for (var i = 0, l = self.currentTicks.ticks.length; i < l; i++) {
@@ -2233,7 +2227,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        selectEvent: function (index) {
+        _selectEvent: function (index) {
             var self = this;
 
             if ($.wellcome.timeline.currentIndex != index) {
@@ -2241,20 +2235,20 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        selectTickEvent: function (evnt) {
+        _selectTickEvent: function (evnt) {
             var self = this;
 
-            var tickEventElem = self.getTickEventElem(evnt);
+            var tickEventElem = self._getTickEventElem(evnt);
             tickEventElem.addClass('selected');
 
             // if at max zoom, reset zindex.
-            if (self.isMaxZoom()) {
-                self.setEventToTop(evnt);
+            if (self._isMaxZoom()) {
+                self._setEventToTop(evnt);
             }
         },
 
         // get the current tickEventElem for a given event.
-        getTickEventElem: function (evnt) {
+        _getTickEventElem: function (evnt) {
             var self = this;
 
             for (var i = 0, l = self.currentTicks.ticks.length; i < l; i++) {
@@ -2276,15 +2270,15 @@ function WellcomeTimelineProvider(options) {
             return null;
         },
         
-        navigateToEvent: function (evnt) {
+        _navigateToEvent: function (evnt) {
             var self = this;
 
             self.isNavigating = true;
             self._trigger('onStartNavigating');
 
             // get the target scroll position.
-            var currentScroll = Math.floor((self.getContentWidth() * self.getCurrentScrollPosition()));
-            var targetScroll = self.getEventScrollPosition(evnt.index);
+            var currentScroll = Math.floor((self._getContentWidth() * self._getCurrentScrollPosition()));
+            var targetScroll = self._getEventScrollPosition(evnt.index);
 
             var direction;
 
@@ -2314,7 +2308,7 @@ function WellcomeTimelineProvider(options) {
                 duration: diff * 0.6,
                 easing: 'easeInOutCubic',
                 step: function () {
-                    self.scrollToPosition(Math.floor(this.val));
+                    self._scrollToPosition(Math.floor(this.val));
 
                     var pos = normalise(this.val, currentScroll, targetScroll);
                     self._trigger('onScrollStep', null, { direction: direction.toString(), pos: pos.toString() });
@@ -2322,8 +2316,8 @@ function WellcomeTimelineProvider(options) {
                 complete: function () {
                     self._trigger('onFinishScroll', null, direction.toString());
                     // scrolled into position, now zoom until visible.
-                    self.zoomUntilVisible(evnt, function () {
-                        self.refresh(function () {
+                    self._zoomUntilVisible(evnt, function () {
+                        self._refresh(function () {
                             self.isNavigating = false;
                             self._trigger('onFinishNavigating');
                             self._trigger('onFinishZoom');
@@ -2334,27 +2328,27 @@ function WellcomeTimelineProvider(options) {
             });
         },
 
-        zoomIn: function () {
+        _zoomIn: function () {
             var self = this;
 
-            self.zoom(1, function () {
-                self.refresh(function () {
+            self._zoom(1, function () {
+                self._refresh(function () {
                     self._trigger('onFinishZoom');
                 });
             });
         },
 
-        zoomOut: function () {
+        _zoomOut: function () {
             var self = this;
 
-            self.zoom(-1, function () {
-                self.refresh(function () {
+            self._zoom(-1, function () {
+                self._refresh(function () {
                     self._trigger('onFinishZoom');
                 });
             });
         },
 
-        zoomUntilVisible: function (evnt, callback) {
+        _zoomUntilVisible: function (evnt, callback) {
             var self = this;
 
             if (evnt.isVisible) {
@@ -2362,32 +2356,32 @@ function WellcomeTimelineProvider(options) {
                 return;
             } 
 
-            self.refresh(function () {
+            self._refresh(function () {
 
                 if (evnt.isVisible) {
                     callback();
                     return;
                 }
 
-                self.zoom(1, function () {
-                    self.zoomUntilVisible(evnt, callback);
+                self._zoom(1, function () {
+                    self._zoomUntilVisible(evnt, callback);
                 });
             });
         },
 
         // direction 1 to zoom in, -1 to zoom out or 0 to just scroll.
-        zoom: function (direction, callback) {
+        _zoom: function (direction, callback) {
             var self = this;
 
-            if (!self.canZoom(direction)) return;
+            if (!self._canZoom(direction)) return;
 
             self.isZooming = true;
             self._trigger('onStartZoom');
 
             self.currentZoomLevel += direction;
 
-            var currentScroll = self.getCurrentScrollPosition();
-            var finalWidth = self.getNextZoomWidth(direction);
+            var currentScroll = self._getCurrentScrollPosition();
+            var finalWidth = self._getNextZoomWidth(direction);
             var targetIndex = $.wellcome.timeline.currentIndex;
 
             // update the width of the content in the scroll area.
@@ -2401,14 +2395,14 @@ function WellcomeTimelineProvider(options) {
                     var targetScroll;
 
                     if (targetIndex != -1) {
-                        targetScroll = self.getEventScrollPosition(targetIndex);
+                        targetScroll = self._getEventScrollPosition(targetIndex);
                     } else {
                         // maintain current relative scroll position.
-                        targetScroll = Math.floor((self.getContentWidth() * currentScroll));
+                        targetScroll = Math.floor((self._getContentWidth() * currentScroll));
                     }
 
-                    self.scrollToPosition(targetScroll);
-                    self.redraw(true, true);
+                    self._scrollToPosition(targetScroll);
+                    self._redraw(true, true);
                 },
                 easing: 'easeInOutCubic',
                 duration: $.wellcome.timeline.provider.options.zoomAnimationDuration,
@@ -2417,33 +2411,33 @@ function WellcomeTimelineProvider(options) {
                     self.hasZoomed = true;
 
                     // do a final full redraw without clipping.
-                    self.redraw(false, false);
+                    self._redraw(false, false);
 
                     if (callback) callback();
                 }
             });
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             self.scrollElem.width(self.element.width() - parseInt(self.scrollElem.css('margin-left')) - parseInt(self.scrollElem.css('margin-right')));
             self.contentElem.width(self.element.width());
 
-            self.redraw(false, false);
-            self.refresh(null, true);
+            self._redraw(false, false);
+            self._refresh(null, true);
         },
 
-        redraw: function (clip, onlyVisible) {
+        _redraw: function (clip, onlyVisible) {
             var self = this;
 
-            self.drawBackgroundEvents();
-            self.drawEvents(clip, onlyVisible);
-            self.drawTicks();
+            self._drawBackgroundEvents();
+            self._drawEvents(clip, onlyVisible);
+            self._drawTicks();
             self.scroll.refresh();
         },
 
-        refresh: function (callback, resize) {
+        _refresh: function (callback, resize) {
             var self = this;
 
             if (!resize) {
@@ -2456,7 +2450,7 @@ function WellcomeTimelineProvider(options) {
                         self.lastZoomLevel = self.currentZoomLevel;
                     }
 
-                    self.selectCurrentEvent();
+                    self._selectCurrentEvent();
                     if (callback) callback();
                     return;
                 } else {
@@ -2465,14 +2459,14 @@ function WellcomeTimelineProvider(options) {
                 }
             }
 
-            self.updateVisibleEvents();
-            self.setEventsZIndex();
-            self.updateVisibleTicks();
+            self._updateVisibleEvents();
+            self._setEventsZIndex();
+            self._updateVisibleTicks();
                 
-            self.showVisibleEvents(function () {
+            self._showVisibleEvents(function () {
 
-                self.updateNavigationAvailability();
-                self.selectCurrentEvent();
+                self._updateNavigationAvailability();
+                self._selectCurrentEvent();
                 
                 self._trigger('onRefreshed');
 
@@ -2480,26 +2474,26 @@ function WellcomeTimelineProvider(options) {
             });
         },
 
-        selectCurrentEvent: function() {
+        _selectCurrentEvent: function() {
             var self = this;
             
             // ensure all events are cleared of highlight.
             self.eventsElem.find('.event').removeClass('highlighted');
             self.timeElem.find('.tickEvent').removeClass('highlighted');
 
-            var evnt = self.getCurrentEvent();
+            var evnt = self._getCurrentEvent();
 
             if (evnt) {
-                self.setEventToTop(evnt);
+                self._setEventToTop(evnt);
                 evnt.elem.addClass('selected');
-                self.selectTickEvent(evnt);
+                self._selectTickEvent(evnt);
             }
         },
 
-        drawBackgroundEvents: function () {
+        _drawBackgroundEvents: function () {
             var self = this;
 
-            var contentWidth = self.getContentWidth();
+            var contentWidth = self._getContentWidth();
 
             for (var i = 0, l = self.backgroundEvents.length; i < l; i++) {
                 var evnt = self.backgroundEvents[i];
@@ -2516,11 +2510,11 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        drawEvents: function (clip, onlyVisible) {
+        _drawEvents: function (clip, onlyVisible) {
             var self = this;
 
-            var contentWidth = self.getContentWidth();
-            var scrollWidth = self.getScrollWidth();
+            var contentWidth = self._getContentWidth();
+            var scrollWidth = self._getScrollWidth();
 
             for (var i = 0, l = self.events.length; i < l; i++) {
                 var evnt = self.events[i];
@@ -2573,10 +2567,10 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        drawTicks: function () {
+        _drawTicks: function () {
             var self = this;
 
-            var availableWidth = self.getContentWidth();
+            var availableWidth = self._getContentWidth();
 
             var newTicks;
 
@@ -2625,51 +2619,51 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        isMaxZoom: function () {
+        _isMaxZoom: function () {
             var self = this;
 
-            if (!self.canZoom(1)) return true;
+            if (!self._canZoom(1)) return true;
 
             return false;
         },
 
-        isMinZoom: function () {
+        _isMinZoom: function () {
             var self = this;
 
-            if (!self.canZoom(-1)) return true;
+            if (!self._canZoom(-1)) return true;
 
             return false;
         },
 
-        getCurrentScrollPosition: function () {
+        _getCurrentScrollPosition: function () {
             var self = this;
 
-            return normalise(self.scroll.x, 0, self.getContentWidth());
+            return normalise(self.scroll.x, 0, self._getContentWidth());
             //return normalise(self.scroll.x - self.scroll.x, 0, self.contentElem.width());
         },
 
-        scrollToPosition: function (position) {
+        _scrollToPosition: function (position) {
             var self = this;
 
             // if position is less than the content width - viewport,
             // restrict to that bounding.
-            var min = (self.getContentWidth() - self.getScrollWidth()) * -1;
+            var min = (self._getContentWidth() - self._getScrollWidth()) * -1;
 
             position = clamp(position, min, 0);
 
             self.scroll.scrollTo(position, 0);
         },
 
-        getEventScrollPosition: function (index) {
+        _getEventScrollPosition: function (index) {
             var self = this;
 
             var evnt = self.events[index];
             //var pos = Math.floor((evnt.position * self.getContentWidth()) - (self.getScrollWidth() / 2) + (evnt.elem.width() / 2)) * -1;
-            var pos = Math.floor((evnt.position * self.getContentWidth()) - (self.getScrollWidth() / 2) + 100) * -1; // hard-code half of width (100) to ignore minimised event widths.
+            var pos = Math.floor((evnt.position * self._getContentWidth()) - (self._getScrollWidth() / 2) + 100) * -1; // hard-code half of width (100) to ignore minimised event widths.
             return pos;
         },
 
-        highlightEvent: function (index) {
+        _highlightEvent: function (index) {
             var self = this;
 
             if (self.isZooming) return;
@@ -2677,16 +2671,16 @@ function WellcomeTimelineProvider(options) {
             var evnt = self.events[index];
             evnt.elem.addClass('highlighted');
 
-            var tickEventElem = self.getTickEventElem(evnt);
+            var tickEventElem = self._getTickEventElem(evnt);
             tickEventElem.addClass('highlighted');
 
             // if at max zoom, bring to top
-            if (self.isMaxZoom()) {
-                self.setEventToTop(evnt);
+            if (self._isMaxZoom()) {
+                self._setEventToTop(evnt);
             }
         },
 
-        unhighlightEvent: function (index) {
+        _unhighlightEvent: function (index) {
             var self = this;
 
             if (self.isZooming) return;
@@ -2694,21 +2688,21 @@ function WellcomeTimelineProvider(options) {
             var evnt = self.events[index];
             evnt.elem.removeClass('highlighted');
 
-            var tickEventElem = self.getTickEventElem(evnt);
+            var tickEventElem = self._getTickEventElem(evnt);
             tickEventElem.removeClass('highlighted');
 
             // if at max zoom, reset zindex.
-            if (self.isMaxZoom()) {
-                self.setEventZIndex(evnt);
+            if (self._isMaxZoom()) {
+                self._setEventZIndex(evnt);
 
                 // if an event is selected, return it to the top.
-                if (self.getCurrentEvent()) {
-                    self.setEventToTop(self.getCurrentEvent());
+                if (self._getCurrentEvent()) {
+                    self._setEventToTop(self._getCurrentEvent());
                 }
             }
         },
 
-        getNextZoomWidth: function (direction) {
+        _getNextZoomWidth: function (direction) {
             var self = this;
 
             var oldWidth = self.contentElem.width();
@@ -2718,11 +2712,11 @@ function WellcomeTimelineProvider(options) {
             return newWidth;
         },
 
-        canZoom: function (direction) {
+        _canZoom: function (direction) {
             var self = this;
 
             //var newZoomLevel = self.currentZoomLevel + direction;
-            var newWidth = self.getNextZoomWidth(direction);
+            var newWidth = self._getNextZoomWidth(direction);
 
             // make sure the new width isn't less than the visible scrolling area.
             if (newWidth < self.scrollElem.width()) {
@@ -2730,7 +2724,7 @@ function WellcomeTimelineProvider(options) {
             }
 
             // make sure the new width isn't more than the maximum width.
-            if (newWidth > self.getMaxWidth()) {
+            if (newWidth > self._getMaxWidth()) {
                 return false;
             }
 
@@ -2738,7 +2732,7 @@ function WellcomeTimelineProvider(options) {
         },
 
         // year tick max width * # year ticks.
-        getMaxWidth: function () {
+        _getMaxWidth: function () {
             var self = this;
 
             var maxYearIntervalWidth = $.wellcome.timeline.provider.options.maxYearIntervalWidth;
@@ -2754,27 +2748,23 @@ function WellcomeTimelineProvider(options) {
             return maxWidth;
         },
 
-        getContentWidth: function () {
+        _getContentWidth: function () {
             var self = this;
 
             return self.contentElem.width();
         },
 
-        getScrollWidth: function () {
+        _getScrollWidth: function () {
             var self = this;
 
             return self.scrollElem.width();
         },
 
-        getDecade: function (date) {
-            var self = this;
-
+        _getDecade: function (date) {
             return Math.floor(date.year() / 10) * 10;
         },
 
-        getCentury: function (date) {
-            var self = this;
-
+        _getCentury: function (date) {
             return Math.floor(date.year() / 100) * 100;
         },
 
@@ -2793,7 +2783,7 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.TOGGLE_FULLSCREEN, function (e, obj) {
-                self.toggleFullScreen(obj);
+                self._toggleFullScreen(obj);
             });
 
             // create ui.
@@ -2822,7 +2812,7 @@ function WellcomeTimelineProvider(options) {
             if (!$.wellcome.timeline.isEmbedEnabled()) self.embedButtonElem.hide();
         },
 
-        toggleFullScreen: function (isFullScreen) {
+        _toggleFullScreen: function (isFullScreen) {
             var self = this;
 
             if (isFullScreen) {
@@ -2859,7 +2849,7 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.ESCAPE, function () {
@@ -2947,7 +2937,7 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        resize: function () {
+        _resize: function () {
         },
 
         _init: function () {
@@ -3098,7 +3088,7 @@ function WellcomeTimelineProvider(options) {
                 self.currentWidth = self.smallWidth;
                 self.currentHeight = self.smallHeight;
 
-                self.formatCode();
+                self._formatCode();
             });
 
             self.mediumSizeElem.click(function (e) {
@@ -3107,7 +3097,7 @@ function WellcomeTimelineProvider(options) {
                 self.currentWidth = self.mediumWidth;
                 self.currentHeight = self.mediumHeight;
 
-                self.formatCode();
+                self._formatCode();
             });
 
             self.largeSizeElem.click(function (e) {
@@ -3116,7 +3106,7 @@ function WellcomeTimelineProvider(options) {
                 self.currentWidth = self.largeWidth;
                 self.currentHeight = self.largeHeight;
 
-                self.formatCode();
+                self._formatCode();
             });
 
             self.smallSizeElem.addClass('selected');
@@ -3133,7 +3123,7 @@ function WellcomeTimelineProvider(options) {
             });
 
             self.customWidthElem.keyup(function (event) {
-                self.getCustomSize();
+                self._getCustomSize();
             });
 
             self.customHeightElem.keydown(function (event) {
@@ -3141,25 +3131,25 @@ function WellcomeTimelineProvider(options) {
             });
 
             self.customHeightElem.keyup(function (event) {
-                self.getCustomSize();
+                self._getCustomSize();
             });
 
-            self.formatCode();
+            self._formatCode();
 
             // hide
             self.element.hide();
         },
 
-        getCustomSize: function () {
+        _getCustomSize: function () {
             var self = this;
 
             self.currentWidth = self.customWidthElem.val();
             self.currentHeight = self.customHeightElem.val();
 
-            self.formatCode();
+            self._formatCode();
         },
 
-        formatCode: function () {
+        _formatCode: function () {
             var self = this;
 
             self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, $.wellcome.timeline.options.embedScriptUri);
@@ -3167,7 +3157,7 @@ function WellcomeTimelineProvider(options) {
             self.codeElem.val(self.code);
         },
 
-        resize: function () {
+        _resize: function () {
         },
 
         _init: function () {
@@ -3200,12 +3190,12 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
-                self.disablePrev();
-                self.disableNext();
+                self._disablePrev();
+                self._disableNext();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_ZOOM, function () {
-                self.refresh();
+                self._refresh();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_NAVIGATING, function (e, direction) {
@@ -3225,13 +3215,13 @@ function WellcomeTimelineProvider(options) {
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
-                self.disablePrev();
-                self.disableNext();
-                self.prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
+                self._disablePrev();
+                self._disableNext();
+                self._prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.SCROLL_STEP, function (e, obj) {
-                self.scroll(parseInt(obj.direction), obj.pos);
+                self._scroll(parseInt(obj.direction), obj.pos);
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_SCROLL, function (e, direction) {
@@ -3275,17 +3265,17 @@ function WellcomeTimelineProvider(options) {
                 if (self.isPrevEnabled) {
                     // if at the first event, show intro.
                     if ($.wellcome.timeline.currentIndex == 0) {
-                        self.prepEvent(-1, self.events[0]);
+                        self._prepEvent(-1, self.events[0]);
 
                         $({ val: 0 }).animate({ val: 1 }, {
                             duration: 500,
                             easing: 'easeInOutCubic',
                             step: function () {
-                                self.scroll(1, this.val);
+                                self._scroll(1, this.val);
                             },
                             complete: function () {
                                 self.currentDetailsElem = self.nextDetailsElem;
-                                self.refresh();
+                                self._refresh();
 
                             }
                         });
@@ -3308,13 +3298,13 @@ function WellcomeTimelineProvider(options) {
             // add intro to start.
             self.events.unshift($.wellcome.timeline.provider.data);
 
-            self.prepEvent(0, self.events[0]);
+            self._prepEvent(0, self.events[0]);
             self.currentDetailsElem = self.nextDetailsElem;
-            self.refresh();
+            self._refresh();
             self.open();
         },
 
-        refresh: function () {
+        _refresh: function () {
             var self = this;
 
             if (self.isNavigating) return;
@@ -3322,9 +3312,9 @@ function WellcomeTimelineProvider(options) {
             var currentIndex = $.wellcome.timeline.currentIndex;
 
             if (currentIndex == -1) {
-                self.disablePrev();
+                self._disablePrev();
             } else {
-                self.enablePrev();
+                self._enablePrev();
             }
 
             var length = $.wellcome.timeline.provider.data.Events.length;
@@ -3334,13 +3324,13 @@ function WellcomeTimelineProvider(options) {
             }
 
             if (currentIndex == length - 1) {
-                self.disableNext();
+                self._disableNext();
             } else {
-                self.enableNext();
+                self._enableNext();
             }
         },
 
-        resize: function() {
+        _resize: function() {
             var self = this;
 
             var $win = $(window);
@@ -3373,7 +3363,7 @@ function WellcomeTimelineProvider(options) {
             self.centerRightColElem.width(centerRightColWidth);
         },
 
-        prepEvent: function (direction, evnt) {
+        _prepEvent: function (direction, evnt) {
             var self = this;
 
             self.nextDetailsElem = self.detailsTemplate.clone();
@@ -3430,10 +3420,10 @@ function WellcomeTimelineProvider(options) {
             self.centerLeftColElem = self.nextDetailsElem.find('.centerLeftCol');
             self.centerRightColElem = self.nextDetailsElem.find('.centerRightCol');
 
-            self.resize();
+            self._resize();
         },
 
-        scroll: function (direction, pos) {
+        _scroll: function (direction, pos) {
             var self = this;
 
             // if there's a current details element, move it out of the way
@@ -3451,28 +3441,28 @@ function WellcomeTimelineProvider(options) {
             }
         },
 
-        disablePrev: function () {
+        _disablePrev: function () {
             var self = this;
 
             self.isPrevEnabled = false;
             self.prevBtnElem.addClass('disabled');
         },
 
-        enablePrev: function () {
+        _enablePrev: function () {
             var self = this;
 
             self.isPrevEnabled = true;
             self.prevBtnElem.removeClass('disabled');
         },
 
-        disableNext: function () {
+        _disableNext: function () {
             var self = this;
 
             self.isNextEnabled = false;
             self.nextBtnElem.addClass('disabled');
         },
 
-        enableNext: function () {
+        _enableNext: function () {
             var self = this;
 
             self.isNextEnabled = true;

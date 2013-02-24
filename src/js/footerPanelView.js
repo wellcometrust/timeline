@@ -7,7 +7,7 @@
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.TOGGLE_FULLSCREEN, function (e, obj) {
-                self.toggleFullScreen(obj);
+                self._toggleFullScreen(obj);
             });
 
             // create ui.
@@ -36,7 +36,7 @@
             if (!$.wellcome.timeline.isEmbedEnabled()) self.embedButtonElem.hide();
         },
 
-        toggleFullScreen: function (isFullScreen) {
+        _toggleFullScreen: function (isFullScreen) {
             var self = this;
 
             if (isFullScreen) {

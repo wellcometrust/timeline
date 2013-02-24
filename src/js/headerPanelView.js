@@ -11,21 +11,21 @@
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
-                self.disableZoomIn();
-                self.disableZoomOut();
+                self._disableZoomIn();
+                self._disableZoomOut();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_ZOOM, function () {
-                self.refresh();
+                self._refresh();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
-                self.disableZoomIn();
-                self.disableZoomOut();
+                self._disableZoomIn();
+                self._disableZoomOut();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_NAVIGATING, function (e, direction) {
@@ -37,7 +37,7 @@
             });
             
             $.wellcome.timeline.bind($.wellcome.timeline.REFRESHED, function () {
-                self.refresh();
+                self._refresh();
             });
 
             // create ui.
@@ -87,35 +87,35 @@
             });
         },
 
-        disableZoomIn: function () {
+        _disableZoomIn: function () {
             var self = this;
 
             self.isZoomInEnabled = false;
             self.zoomInButtonElem.fadeTo(0, 0.5);
         },
 
-        enableZoomIn: function () {
+        _enableZoomIn: function () {
             var self = this;
 
             self.isZoomInEnabled = true;
             self.zoomInButtonElem.fadeTo(0, 1);
         },
 
-        disableZoomOut: function () {
+        _disableZoomOut: function () {
             var self = this;
 
             self.isZoomOutEnabled = false;
             self.zoomOutButtonElem.fadeTo(0, 0.5);
         },
 
-        enableZoomOut: function () {
+        _enableZoomOut: function () {
             var self = this;
 
             self.isZoomOutEnabled = true;
             self.zoomOutButtonElem.fadeTo(0, 1);
         },
 
-        resize: function () {
+        _resize: function () {
             var self = this;
 
             var availWidth = self.element.width() - self.rightColElem.width();
@@ -125,21 +125,21 @@
             self.titleElem.ellipsisFill(self.title);
         },
 
-        refresh: function () {
+        _refresh: function () {
             var self = this;
 
             if (self.isNavigating) return;
 
             if ($.wellcome.timeline.isMinZoom) {
-                self.disableZoomOut();
+                self._disableZoomOut();
             } else {
-                self.enableZoomOut();
+                self._enableZoomOut();
             }
 
             if ($.wellcome.timeline.isMaxZoom) {
-                self.disableZoomIn();
+                self._disableZoomIn();
             } else {
-                self.enableZoomIn();
+                self._enableZoomIn();
             }
         },
 

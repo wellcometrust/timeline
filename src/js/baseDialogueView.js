@@ -10,7 +10,7 @@
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.RESIZE, function () {
-                self.resize();
+                self._resize();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.ESCAPE, function () {
@@ -98,7 +98,7 @@
             }
         },
 
-        resize: function () {
+        _resize: function () {
         },
 
         _init: function () {
