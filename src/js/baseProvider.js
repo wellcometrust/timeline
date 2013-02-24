@@ -1,8 +1,7 @@
 
 function BaseProvider() {
     this.options = {
-        dataUriTemplate: '{0}{1}.js',
-        embedScriptUri: '/js/embed.js'
+        dataUriTemplate: '{0}{1}.js'
     };
 
     this.load = function() {

@@ -1,4 +1,4 @@
-// 9b1bc26 - 2013-02-24
+// ef0d5a3 - 2013-02-24
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
@@ -845,8 +845,7 @@ function getMaxZIndex(){
 
 function BaseProvider() {
     this.options = {
-        dataUriTemplate: '{0}{1}.js',
-        embedScriptUri: '/js/embed.js'
+        dataUriTemplate: '{0}{1}.js'
     };
 
     this.load = function() {
@@ -1153,7 +1152,8 @@ function WellcomeTimelineProvider(options) {
 
             //self.getParams();
 
-            var options = {
+            self.options.provider.create(
+            {
                 element: self.element,
                 baseUri: self.options.baseUri,
                 timelineId: self.options.timelineId,
@@ -1161,12 +1161,10 @@ function WellcomeTimelineProvider(options) {
                 dataUri: self.options.dataUri,
                 data: self.data,
                 config: self.config,
-                uri: self.options.uri,
+                embedScriptUri: self.options.embedScriptUri,
                 isHomeDomain: self.options.isHomeDomain,
                 isOnlyInstance: self.options.isOnlyInstance
-            };
-
-            self.options.provider.create(options);
+            });
         },
 
         reset: function () {
@@ -3167,9 +3165,9 @@ function WellcomeTimelineProvider(options) {
         formatCode: function () {
             var self = this;
 
-            var embedScriptUri = "//" + document.domain + $.wellcome.timeline.options.embedScriptUri;
+            //var embedScriptUri = "//" + document.domain + $.wellcome.timeline.options.embedScriptUri;
 
-            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, embedScriptUri);
+            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, $.wellcome.timeline.options.embedScriptUri);
 
             self.codeElem.val(self.code);
         },

@@ -30,7 +30,8 @@
 
             //self.getParams();
 
-            var options = {
+            self.options.provider.create(
+            {
                 element: self.element,
                 baseUri: self.options.baseUri,
                 timelineId: self.options.timelineId,
@@ -38,12 +39,10 @@
                 dataUri: self.options.dataUri,
                 data: self.data,
                 config: self.config,
-                uri: self.options.uri,
+                embedScriptUri: self.options.embedScriptUri,
                 isHomeDomain: self.options.isHomeDomain,
                 isOnlyInstance: self.options.isOnlyInstance
-            };
-
-            self.options.provider.create(options);
+            });
         },
 
         reset: function () {

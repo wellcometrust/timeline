@@ -177,9 +177,7 @@
         formatCode: function () {
             var self = this;
 
-            var embedScriptUri = "//" + document.domain + $.wellcome.timeline.options.embedScriptUri;
-
-            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, embedScriptUri);
+            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, $.wellcome.timeline.options.embedScriptUri);
 
             self.codeElem.val(self.code);
         },

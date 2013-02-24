@@ -543,6 +543,10 @@ p {
     padding: 0 0 30px 8px;
 }
 
+#timeline .overlay.embedView .middle h1{
+    margin-bottom: 10px;
+}
+
 #timeline .overlay.embedView .middle textarea.code{
     width: 100%;
     height: 90px;

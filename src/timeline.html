@@ -2,6 +2,9 @@
 <html>
 <head> 
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <!--[if lte IE 8]>
+	<link rel="stylesheet" type="text/css" href="css/ie.css" />
+    <![endif]-->
 </head>
 <body>
 
@@ -47,10 +50,10 @@
                 height: $(window).height()
             });
 
-            var isHomeDomain = getParameterByName('hd') || false;
-            var isOnlyInstance = getParameterByName('oi') || false;
-            var uri = getParameterByName('u');
-            var dataUri = getParameterByName('d');
+            var isHomeDomain = getParameterByName('isHomeDomain') || false;
+            var isOnlyInstance = getParameterByName('isOnlyInstance') || false;
+            var embedScriptUri = getParameterByName('embedScriptUri');
+            var dataUri = getParameterByName('dataUri');
 
             var createTimeline = function () {
 
@@ -58,7 +61,7 @@
                 {
                     configUri: 'js/config.js',
                     dataUri: dataUri,
-                    uri: uri,
+                    embedScriptUri: embedScriptUri,
                     isHomeDomain: isHomeDomain,
                     isOnlyInstance: isOnlyInstance,
                     provider: new WellcomeTimelineProvider()

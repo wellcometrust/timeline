@@ -6,19 +6,16 @@
 
     window.wellcomeTimelineScriptIncluded = true;
 
-    // get the script domain.
+    // get the script location.
     var scripts = document.getElementsByTagName('script');
-    var domain;
+    var scriptUri;
 
     // loop backwards through the loaded scripts until you reach last one with a src.
     // fixes problem in IE when using an empty script with a comment to prevent wordpress wysiwyg editor script-stripping.
     for (var i = scripts.length - 1; i >= 0; i--) {
         var s = scripts[i];
-        
         if (s.src) {
-            var a = document.createElement('a');
-            a.href = s.src;
-            domain = a.hostname;
+            scriptUri = s.src;
             break;
         }
     }
@@ -27,21 +24,26 @@
     var loaded = false;
 
     // only load jQuery if not already included in page.
-    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, domain, loaded)) {
+    if (!(j = window.jQuery) || version > j.fn.jquery || callback(j, scriptUri, loaded)) {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "//ajax.googleapis.com/ajax/libs/jquery/" + version + "/jquery.min.js";
         script.onload = script.onreadystatechange = function () {
             if (!loaded && (!(d = this.readyState) || d == "loaded" || d == "complete")) {
-                callback((j = window.jQuery).noConflict(1), domain, loaded = true);
+                callback((j = window.jQuery).noConflict(1), scriptUri, loaded = true);
                 j(script).remove();
             }
         };
         document.documentElement.childNodes[0].appendChild(script);
     }
-})(window, document, "1.7.2", function ($, domain, jqueryLoaded) {
+})(window, document, "1.7.2", function ($, scriptUri, jqueryLoaded) {
 
     $.support.cors = true;
+    
+    // get the scriptUri domain.
+    var a = document.createElement('a');
+    a.href = scriptUri;
+    var domain = a.hostname;
 
     $.when($.getScript('//' + domain + '/js/libs/easyXDM.min.js'),
         $.getScript('//' + domain + '/js/libs/json2.min.js')).done(function () {
@@ -145,7 +147,11 @@
 
         function createSocket() {
 
-            var uri = "http://" + domain + "/timeline.html?hd=" + isHomeDomain + "&oi=" + isOnlyInstance + "&d=" + dataUri + "&u=" + document.URL;
+            var uri = "http://" + domain + "/timeline.html?" +
+                "isHomeDomain=" + isHomeDomain +
+                "&isOnlyInstance=" + isOnlyInstance +
+                "&dataUri=" + dataUri +
+                "&embedScriptUri=" + scriptUri;
 
             socket = new easyXDM.Socket({
                 remote: uri,
