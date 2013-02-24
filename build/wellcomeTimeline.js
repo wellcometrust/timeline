@@ -1,4 +1,4 @@
-//0dd1499 - Sun Feb 24 13:35:10 2013 +0000
+// 9b1bc26 - 2013-02-24
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)

@@ -1,7 +1,7 @@
 
 # Get last commit hash and date
-$commitComment = "//"
-$commitComment += git log --pretty=format:"%h - %ad" -1
+$commitComment = "// "
+$commitComment += git log --pretty=format:"%h - %ad" -1 --date=short
 
 # Initialise paths
 $path = $MyInvocation.MyCommand.Path
