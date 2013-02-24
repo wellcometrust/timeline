@@ -1698,7 +1698,7 @@ function WellcomeTimelineProvider(options) {
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_INDEX_CHANGE, function (e, index) {
-                self.startIndexChange(index);
+                self.navigateToEvent(index);
             });
 
             // create ui.
@@ -2116,6 +2116,10 @@ function WellcomeTimelineProvider(options) {
         updateNavigationAvailability: function () {
             var self = this;
 
+            $.wellcome.timeline.isMinZoom = self.isMinZoom();
+            $.wellcome.timeline.isMaxZoom = self.isMaxZoom();
+
+            /*
             if (self.isMinZoom()) {
                 $.wellcome.timeline.isMinZoom = true;
             } else {
@@ -2127,6 +2131,7 @@ function WellcomeTimelineProvider(options) {
             } else {
                 $.wellcome.timeline.isMaxZoom = false;
             }
+            */
         },
 
         // decide which events are visible.
@@ -2284,19 +2289,11 @@ function WellcomeTimelineProvider(options) {
 
             return null;
         },
-
-        startIndexChange: function (index) {
+        
+        navigateToEvent: function (index) {
             var self = this;
 
             if (index == -1) return;
-
-            self.navigateToEvent(index, function () {
-                self.onNavigateToEventComplete(index);
-            });
-        },
-
-        navigateToEvent: function (index, callback) {
-            var self = this;
 
             self.isNavigating = true;
             self._trigger('onStartNavigating');
@@ -2341,19 +2338,15 @@ function WellcomeTimelineProvider(options) {
                 complete: function () {
                     self._trigger('onFinishScroll', null, direction.toString());
                     // scrolled into position, now zoom until visible.
-                    self.zoomUntilVisible(index, callback);
+                    self.zoomUntilVisible(index, function() {
+                        self.refresh(function () {
+                            self.isNavigating = false;
+                            self._trigger('onFinishNavigating');
+                            self._trigger('onFinishZoom');
+                            self._trigger('onSelectEventComplete', null, index);
+                        });
+                    });
                 }
-            });
-        },
-
-        onNavigateToEventComplete: function (index) {
-            var self = this;
-
-            self.refresh(function () {
-                self.isNavigating = false;
-                self._trigger('onFinishNavigating');
-                self._trigger('onFinishZoom');
-                self._trigger('onSelectEventComplete', null, index);
             });
         },
 
