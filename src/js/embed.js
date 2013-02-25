@@ -59,7 +59,7 @@
         });
 
     function timeline(element, isHomeDomain, isOnlyInstance) {
-        var socket, $timeline, $timelineFrame, dataUri, isFullScreen, height, top, left;
+        var socket, $timeline, $timelineFrame, dataUri, eventId, isFullScreen, height, top, left;
 
         $timeline = $(element);
 
@@ -69,6 +69,8 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $timeline.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
+        
+        eventId = $timeline.attr('data-eventid');
 
         isFullScreen = false;
         height = $timeline.height();
@@ -151,6 +153,7 @@
                 "isHomeDomain=" + isHomeDomain +
                 "&isOnlyInstance=" + isOnlyInstance +
                 "&dataUri=" + dataUri +
+                "&eventId=" + eventId +
                 "&embedScriptUri=" + scriptUri;
 
             socket = new easyXDM.Socket({

@@ -28,8 +28,6 @@
 
             self._reset();
 
-            //self.getParams();
-
             self.options.provider.create(
             {
                 element: self.element,
@@ -37,6 +35,7 @@
                 timelineId: self.options.timelineId,
                 dataUriTemplate: self.options.dataUriTemplate,
                 dataUri: self.options.dataUri,
+                eventId: self.options.eventId,
                 data: self.data,
                 config: self.config,
                 embedScriptUri: self.options.embedScriptUri,

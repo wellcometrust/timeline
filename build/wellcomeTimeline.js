@@ -1,4 +1,4 @@
-// 2fef14c - 2013-02-24
+// 2670924 - 2013-02-24
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
@@ -1017,11 +1017,121 @@ function WellcomeTimelineProvider(options) {
 
             self._trigger(self.START_INDEX_CHANGE, index);
             self._trigger(self.SHOW_EVENT_DETAILS_DIALOGUE);
+
+            var eventId = "0";
+
+            if (index != -1) {
+                eventId = $.wellcome.timeline.getEventByIndex(index).EventId;
+            }
+            
+            self.setAddress(eventId);
+        },
+        
+        viewEvent: function(eventId) {
+            var self = this;
+
+            for (var i = 0, l = self.provider.data.Events.length; i < l; i++) {
+                var evnt = self.provider.data.Events[i];
+                
+                if (evnt.EventId == eventId) {
+                    // give IE a bit of breathing room...
+                    setTimeout(function () {
+                        self.changeIndex(i);
+                    }, 100);
+                    
+                    break;
+                }
+            }
         },
 
         getView: function (name) {
             var self = this;
             return self.element.timeline_shell('getView', name);
+        },
+
+        getAbsoluteUrl: function () {
+            return $.address.baseURL() + '#' + $.address.path();
+        },
+
+        getRelativeUrl: function () {
+            var self = this;
+
+            var absUri = self.getAbsoluteUrl();
+            var parts = getUrlParts(absUri);
+            var relUri = parts.pathname + '#' + $.address.path();
+
+            if (!relUri.startsWith("/")) {
+                relUri = "/" + relUri;
+            }
+
+            return relUri;
+        },
+
+        // non-destructive address update.
+        updateAddress: function () {
+            var self = this;
+
+            if (!self.urlParamsEnabled()) return;
+
+            var args = Array.prototype.slice.call(arguments);
+
+            var currentPathNames = $.address.pathNames();
+            var length = Math.max(args.length, currentPathNames.length);
+            var newPathNames = new Array(length);
+
+            // construct a new pathnames array containing the old pathnames, but with
+            // a length to accommodate new args.
+            for (var i = 0; i < currentPathNames.length; i++) {
+                newPathNames[i] = currentPathNames[i];
+            }
+
+            for (i = 0; i < args.length; i++) {
+                newPathNames[i] = args[i];
+            }
+
+            // serialise pathNames.
+            var hash = '#';
+
+            for (i = 0; i < length; i++) {
+                hash += newPathNames[i];
+
+                if (i != length - 1) hash += '/';
+            }
+
+            self.updateParentHash(hash);
+        },
+
+        // destructive address update.
+        setAddress: function () {
+            var self = this;
+
+            if (!self.urlParamsEnabled()) return;
+
+            var args = Array.prototype.slice.call(arguments);
+
+            var hash = '#';
+
+            for (var i = 0; i < args.length; i++) {
+                hash += args[i];
+
+                if (i != args.length - 1) hash += '/';
+            }
+
+            self.updateParentHash(hash);
+        },
+
+        updateParentHash: function (hash) {
+
+            var url = window.parent.document.URL;
+
+            // remove hash value (if present).
+            var index = url.indexOf('#');
+
+            if (index != -1) {
+                url = url.substr(0, url.indexOf('#'));
+            }
+
+            window.parent.document.location.replace(url + hash);
         },
 
         // helper for binding views to global events.
@@ -1079,6 +1189,12 @@ function WellcomeTimelineProvider(options) {
             var self = this;
 
             return self.options.config.Settings.EmbedEnabled !== "false";
+        },
+
+        urlParamsEnabled: function () {
+            var self = this;
+
+            return (self.options.isHomeDomain !== "false" && self.options.isOnlyInstance !== "false");
         },
 
         _toggleFullScreen: function () {
@@ -1150,8 +1266,6 @@ function WellcomeTimelineProvider(options) {
 
             self._reset();
 
-            //self.getParams();
-
             self.options.provider.create(
             {
                 element: self.element,
@@ -1159,6 +1273,7 @@ function WellcomeTimelineProvider(options) {
                 timelineId: self.options.timelineId,
                 dataUriTemplate: self.options.dataUriTemplate,
                 dataUri: self.options.dataUri,
+                eventId: self.options.eventId,
                 data: self.data,
                 config: self.config,
                 embedScriptUri: self.options.embedScriptUri,
@@ -1306,6 +1421,34 @@ function WellcomeTimelineProvider(options) {
 
             // initial positioning.
             self._resize();
+            
+            self._getParams();
+        },
+
+        _getParams: function() {
+            var self = this;
+            
+            // use $.address to get initial params.
+            if (self.urlParamsEnabled()) {
+                // disable jquery address history.
+                $.address.history(true);
+
+                var pathNames = $.address.pathNames();
+
+                // has event id been specified?
+                if (pathNames.length) {
+                    var eventId = Number(pathNames[0]);
+
+                    if (eventId != 0) {
+                        self.viewEvent(eventId);
+                    }
+                }
+            } else {
+                // check if an eventid was passed in the embed code.
+                if (self.options.eventId) {
+                    self.viewEvent(self.options.eventId);
+                }
+            }
         },
 
         _deselectCurrentEvent: function () {
@@ -2977,7 +3120,7 @@ function WellcomeTimelineProvider(options) {
 
     $.widget("wellcome.timeline_embedView", $.wellcome.timeline_baseDialogueView, {
 
-        embedScriptTemplate: "<div class=\"timeline\" data-uri=\"{0}\" style=\"width:{1}px; height:{2}px; background-color: #000\"></div>\n<script type=\"text/javascript\" src=\"{3}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
+        embedScriptTemplate: "<div class=\"timeline\" data-uri=\"{0}\" data-eventid=\"{1}\" style=\"width:{2}px; height:{3}px; background-color: #000\"></div>\n<script type=\"text/javascript\" src=\"{4}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
 
         _create: function () {
             var self = this;
@@ -2993,6 +3136,14 @@ function WellcomeTimelineProvider(options) {
             $.wellcome.timeline.bind($.wellcome.timeline.HIDE_EMBED_DIALOGUE, function () {
                 //$.wellcome.timeline.trackAction("Dialogues", "Embed - Close");
                 self.close();
+            });
+            
+            $.wellcome.timeline.bind($.wellcome.timeline.REFRESHED, function () {
+                self._refresh();
+            });
+            
+            $.wellcome.timeline.bind($.wellcome.timeline.START_INDEX_CHANGE, function (e, direction) {
+                self._refresh();
             });
 
             self.smallWidth = 600;
@@ -3088,7 +3239,7 @@ function WellcomeTimelineProvider(options) {
                 self.currentWidth = self.smallWidth;
                 self.currentHeight = self.smallHeight;
 
-                self._formatCode();
+                self._refresh();
             });
 
             self.mediumSizeElem.click(function (e) {
@@ -3097,7 +3248,7 @@ function WellcomeTimelineProvider(options) {
                 self.currentWidth = self.mediumWidth;
                 self.currentHeight = self.mediumHeight;
 
-                self._formatCode();
+                self._refresh();
             });
 
             self.largeSizeElem.click(function (e) {
@@ -3106,7 +3257,7 @@ function WellcomeTimelineProvider(options) {
                 self.currentWidth = self.largeWidth;
                 self.currentHeight = self.largeHeight;
 
-                self._formatCode();
+                self._refresh();
             });
 
             self.smallSizeElem.addClass('selected');
@@ -3134,7 +3285,7 @@ function WellcomeTimelineProvider(options) {
                 self._getCustomSize();
             });
 
-            self._formatCode();
+            self._refresh();
 
             // hide
             self.element.hide();
@@ -3146,13 +3297,26 @@ function WellcomeTimelineProvider(options) {
             self.currentWidth = self.customWidthElem.val();
             self.currentHeight = self.customHeightElem.val();
 
-            self._formatCode();
+            self._refresh();
         },
 
-        _formatCode: function () {
+        _refresh: function () {
             var self = this;
 
-            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, $.wellcome.timeline.options.embedScriptUri);
+            var currentEvent = $.wellcome.timeline.getCurrentEvent();
+
+            var eventId = "";
+            
+            if (currentEvent) {
+                eventId = currentEvent.EventId;
+            }
+
+            self.code = String.format(self.embedScriptTemplate,
+                $.wellcome.timeline.options.dataUri,
+                eventId,
+                self.currentWidth,
+                self.currentHeight,
+                $.wellcome.timeline.options.embedScriptUri);
 
             self.codeElem.val(self.code);
         },
@@ -3173,6 +3337,7 @@ function WellcomeTimelineProvider(options) {
 
     $.widget("wellcome.timeline_detailsView", $.wellcome.timeline_baseDialogueView, {
 
+        isCloseEnabled: true,
         isPrevEnabled: false,
         isNextEnabled: false,
         isNavigating: false,
@@ -3190,6 +3355,7 @@ function WellcomeTimelineProvider(options) {
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
+                self._disableClose();
                 self._disablePrev();
                 self._disableNext();
             });
@@ -3204,6 +3370,7 @@ function WellcomeTimelineProvider(options) {
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_NAVIGATING, function (e, direction) {
                 self.isNavigating = false;
+                self._refresh();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.SHOW_EVENT_DETAILS_DIALOGUE, function () {
@@ -3215,6 +3382,7 @@ function WellcomeTimelineProvider(options) {
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
+                self._disableClose();
                 self._disablePrev();
                 self._disableNext();
                 self._prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
@@ -3293,6 +3461,14 @@ function WellcomeTimelineProvider(options) {
                 }
             });
 
+            // override close button behaviour.
+            self.closeButtonElem.off('click').on('click', function (e) {
+                e.preventDefault();
+
+                if (!self.isCloseEnabled) return;
+                self.close();
+            });
+
             self.events = $.wellcome.timeline.provider.data.Events.slice();
 
             // add intro to start.
@@ -3309,7 +3485,12 @@ function WellcomeTimelineProvider(options) {
 
             if (self.isNavigating) return;
 
+            // make sure details animation completed.
+            self.currentDetailsElem.css('left', 0);
+
             var currentIndex = $.wellcome.timeline.currentIndex;
+
+            self._enableClose();
 
             if (currentIndex == -1) {
                 self._disablePrev();
@@ -3439,6 +3620,20 @@ function WellcomeTimelineProvider(options) {
 
                 self.nextDetailsElem.css('left', targetLeft);
             }
+        },
+
+        _disableClose: function () {
+            var self = this;
+
+            self.isCloseEnabled = false;
+            self.closeButtonElem.addClass('disabled');
+        },
+        
+        _enableClose: function () {
+            var self = this;
+
+            self.isCloseEnabled = true;
+            self.closeButtonElem.removeClass('disabled');
         },
 
         _disablePrev: function () {

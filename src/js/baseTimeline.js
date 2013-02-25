@@ -93,11 +93,121 @@
 
             self._trigger(self.START_INDEX_CHANGE, index);
             self._trigger(self.SHOW_EVENT_DETAILS_DIALOGUE);
+
+            var eventId = "0";
+
+            if (index != -1) {
+                eventId = $.wellcome.timeline.getEventByIndex(index).EventId;
+            }
+            
+            self.setAddress(eventId);
+        },
+        
+        viewEvent: function(eventId) {
+            var self = this;
+
+            for (var i = 0, l = self.provider.data.Events.length; i < l; i++) {
+                var evnt = self.provider.data.Events[i];
+                
+                if (evnt.EventId == eventId) {
+                    // give IE a bit of breathing room...
+                    setTimeout(function () {
+                        self.changeIndex(i);
+                    }, 100);
+                    
+                    break;
+                }
+            }
         },
 
         getView: function (name) {
             var self = this;
             return self.element.timeline_shell('getView', name);
+        },
+
+        getAbsoluteUrl: function () {
+            return $.address.baseURL() + '#' + $.address.path();
+        },
+
+        getRelativeUrl: function () {
+            var self = this;
+
+            var absUri = self.getAbsoluteUrl();
+            var parts = getUrlParts(absUri);
+            var relUri = parts.pathname + '#' + $.address.path();
+
+            if (!relUri.startsWith("/")) {
+                relUri = "/" + relUri;
+            }
+
+            return relUri;
+        },
+
+        // non-destructive address update.
+        updateAddress: function () {
+            var self = this;
+
+            if (!self.urlParamsEnabled()) return;
+
+            var args = Array.prototype.slice.call(arguments);
+
+            var currentPathNames = $.address.pathNames();
+            var length = Math.max(args.length, currentPathNames.length);
+            var newPathNames = new Array(length);
+
+            // construct a new pathnames array containing the old pathnames, but with
+            // a length to accommodate new args.
+            for (var i = 0; i < currentPathNames.length; i++) {
+                newPathNames[i] = currentPathNames[i];
+            }
+
+            for (i = 0; i < args.length; i++) {
+                newPathNames[i] = args[i];
+            }
+
+            // serialise pathNames.
+            var hash = '#';
+
+            for (i = 0; i < length; i++) {
+                hash += newPathNames[i];
+
+                if (i != length - 1) hash += '/';
+            }
+
+            self.updateParentHash(hash);
+        },
+
+        // destructive address update.
+        setAddress: function () {
+            var self = this;
+
+            if (!self.urlParamsEnabled()) return;
+
+            var args = Array.prototype.slice.call(arguments);
+
+            var hash = '#';
+
+            for (var i = 0; i < args.length; i++) {
+                hash += args[i];
+
+                if (i != args.length - 1) hash += '/';
+            }
+
+            self.updateParentHash(hash);
+        },
+
+        updateParentHash: function (hash) {
+
+            var url = window.parent.document.URL;
+
+            // remove hash value (if present).
+            var index = url.indexOf('#');
+
+            if (index != -1) {
+                url = url.substr(0, url.indexOf('#'));
+            }
+
+            window.parent.document.location.replace(url + hash);
         },
 
         // helper for binding views to global events.
@@ -155,6 +265,12 @@
             var self = this;
 
             return self.options.config.Settings.EmbedEnabled !== "false";
+        },
+
+        urlParamsEnabled: function () {
+            var self = this;
+
+            return (self.options.isHomeDomain !== "false" && self.options.isOnlyInstance !== "false");
         },
 
         _toggleFullScreen: function () {

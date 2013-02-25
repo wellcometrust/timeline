@@ -2,6 +2,7 @@
 
     $.widget("wellcome.timeline_detailsView", $.wellcome.timeline_baseDialogueView, {
 
+        isCloseEnabled: true,
         isPrevEnabled: false,
         isNextEnabled: false,
         isNavigating: false,
@@ -19,6 +20,7 @@
 
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.START_ZOOM, function () {
+                self._disableClose();
                 self._disablePrev();
                 self._disableNext();
             });
@@ -33,6 +35,7 @@
 
             $.wellcome.timeline.bind($.wellcome.timeline.FINISH_NAVIGATING, function (e, direction) {
                 self.isNavigating = false;
+                self._refresh();
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.SHOW_EVENT_DETAILS_DIALOGUE, function () {
@@ -44,6 +47,7 @@
             });
 
             $.wellcome.timeline.bind($.wellcome.timeline.START_SCROLL, function (e, direction) {
+                self._disableClose();
                 self._disablePrev();
                 self._disableNext();
                 self._prepEvent(direction, self.events[$.wellcome.timeline.currentIndex + 1]);
@@ -122,6 +126,14 @@
                 }
             });
 
+            // override close button behaviour.
+            self.closeButtonElem.off('click').on('click', function (e) {
+                e.preventDefault();
+
+                if (!self.isCloseEnabled) return;
+                self.close();
+            });
+
             self.events = $.wellcome.timeline.provider.data.Events.slice();
 
             // add intro to start.
@@ -138,7 +150,12 @@
 
             if (self.isNavigating) return;
 
+            // make sure details animation completed.
+            self.currentDetailsElem.css('left', 0);
+
             var currentIndex = $.wellcome.timeline.currentIndex;
+
+            self._enableClose();
 
             if (currentIndex == -1) {
                 self._disablePrev();
@@ -268,6 +285,20 @@
 
                 self.nextDetailsElem.css('left', targetLeft);
             }
+        },
+
+        _disableClose: function () {
+            var self = this;
+
+            self.isCloseEnabled = false;
+            self.closeButtonElem.addClass('disabled');
+        },
+        
+        _enableClose: function () {
+            var self = this;
+
+            self.isCloseEnabled = true;
+            self.closeButtonElem.removeClass('disabled');
         },
 
         _disablePrev: function () {

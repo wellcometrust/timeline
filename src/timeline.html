@@ -15,10 +15,11 @@
     <script type="text/javascript" src="js/libs/moment.min.js"></script>
     <script type="text/javascript" src="js/libs/easyXDM.min.js"></script>
     <script type="text/javascript" src="js/libs/iscroll.min.js"></script>
-    
-    <!-- Set up a virtual directory to /build or move this into the /src directory -->
-    <!--<script type="text/javascript"src="build/wellcomeTimeline.min.js"></script>-->
-    <script type="text/javascript"src="build/wellcomeTimeline.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.address-1.5.min.js"></script>
+
+    <!-- To test locally, set up a virtual directory to /build or move this into the /src directory -->
+    <script type="text/javascript"src="build/wellcomeTimeline.min.js"></script>
+    <!--<script type="text/javascript"src="build/wellcomeTimeline.js"></script>-->
     
     <!-- 
 
@@ -55,6 +56,7 @@
             var isOnlyInstance = getParameterByName('isOnlyInstance') || false;
             var embedScriptUri = getParameterByName('embedScriptUri');
             var dataUri = getParameterByName('dataUri');
+            var eventId = getParameterByName('eventId');
 
             var createTimeline = function () {
 
@@ -62,6 +64,7 @@
                 {
                     configUri: 'js/config.js',
                     dataUri: dataUri,
+                    eventId: eventId,
                     embedScriptUri: embedScriptUri,
                     isHomeDomain: isHomeDomain,
                     isOnlyInstance: isOnlyInstance,

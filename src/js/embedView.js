@@ -2,7 +2,7 @@
 
     $.widget("wellcome.timeline_embedView", $.wellcome.timeline_baseDialogueView, {
 
-        embedScriptTemplate: "<div class=\"timeline\" data-uri=\"{0}\" style=\"width:{1}px; height:{2}px; background-color: #000\"></div>\n<script type=\"text/javascript\" src=\"{3}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
+        embedScriptTemplate: "<div class=\"timeline\" data-uri=\"{0}\" data-eventid=\"{1}\" style=\"width:{2}px; height:{3}px; background-color: #000\"></div>\n<script type=\"text/javascript\" src=\"{4}\"></script><script type=\"text/javascript\">/* wordpress fix */</script>",
 
         _create: function () {
             var self = this;
@@ -18,6 +18,14 @@
             $.wellcome.timeline.bind($.wellcome.timeline.HIDE_EMBED_DIALOGUE, function () {
                 //$.wellcome.timeline.trackAction("Dialogues", "Embed - Close");
                 self.close();
+            });
+            
+            $.wellcome.timeline.bind($.wellcome.timeline.REFRESHED, function () {
+                self._refresh();
+            });
+            
+            $.wellcome.timeline.bind($.wellcome.timeline.START_INDEX_CHANGE, function (e, direction) {
+                self._refresh();
             });
 
             self.smallWidth = 600;
@@ -113,7 +121,7 @@
                 self.currentWidth = self.smallWidth;
                 self.currentHeight = self.smallHeight;
 
-                self._formatCode();
+                self._refresh();
             });
 
             self.mediumSizeElem.click(function (e) {
@@ -122,7 +130,7 @@
                 self.currentWidth = self.mediumWidth;
                 self.currentHeight = self.mediumHeight;
 
-                self._formatCode();
+                self._refresh();
             });
 
             self.largeSizeElem.click(function (e) {
@@ -131,7 +139,7 @@
                 self.currentWidth = self.largeWidth;
                 self.currentHeight = self.largeHeight;
 
-                self._formatCode();
+                self._refresh();
             });
 
             self.smallSizeElem.addClass('selected');
@@ -159,7 +167,7 @@
                 self._getCustomSize();
             });
 
-            self._formatCode();
+            self._refresh();
 
             // hide
             self.element.hide();
@@ -171,13 +179,26 @@
             self.currentWidth = self.customWidthElem.val();
             self.currentHeight = self.customHeightElem.val();
 
-            self._formatCode();
+            self._refresh();
         },
 
-        _formatCode: function () {
+        _refresh: function () {
             var self = this;
 
-            self.code = String.format(self.embedScriptTemplate, $.wellcome.timeline.options.dataUri, self.currentWidth, self.currentHeight, $.wellcome.timeline.options.embedScriptUri);
+            var currentEvent = $.wellcome.timeline.getCurrentEvent();
+
+            var eventId = "";
+            
+            if (currentEvent) {
+                eventId = currentEvent.EventId;
+            }
+
+            self.code = String.format(self.embedScriptTemplate,
+                $.wellcome.timeline.options.dataUri,
+                eventId,
+                self.currentWidth,
+                self.currentHeight,
+                $.wellcome.timeline.options.embedScriptUri);
 
             self.codeElem.val(self.code);
         },

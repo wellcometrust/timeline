@@ -123,6 +123,34 @@
 
             // initial positioning.
             self._resize();
+            
+            self._getParams();
+        },
+
+        _getParams: function() {
+            var self = this;
+            
+            // use $.address to get initial params.
+            if (self.urlParamsEnabled()) {
+                // disable jquery address history.
+                $.address.history(true);
+
+                var pathNames = $.address.pathNames();
+
+                // has event id been specified?
+                if (pathNames.length) {
+                    var eventId = Number(pathNames[0]);
+
+                    if (eventId != 0) {
+                        self.viewEvent(eventId);
+                    }
+                }
+            } else {
+                // check if an eventid was passed in the embed code.
+                if (self.options.eventId) {
+                    self.viewEvent(self.options.eventId);
+                }
+            }
         },
 
         _deselectCurrentEvent: function () {

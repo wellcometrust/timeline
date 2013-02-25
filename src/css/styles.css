@@ -464,6 +464,12 @@ p {
     float: right;
 }
 
+#timeline .overlay .top .close.disabled{
+    filter: alpha(opacity=30);
+	-moz-opacity:0.3;
+	opacity: 0.3;
+}
+
 #timeline .overlay .middle{
     background: #fff;
     width: 100%;
