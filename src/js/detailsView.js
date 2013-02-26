@@ -219,8 +219,9 @@
             var imgElem = $('<img />');
 
             if (evnt.FeatureImagePath) {
-                self.nextDetailsElem.removeClass('min');
                 imgElem.prop('src', evnt.FeatureImagePath);
+            } else {
+                imgElem.prop('src', $.wellcome.timeline.provider.data.FeatureImagePath);
             }
 
             imgContainerElem.append(imgElem);
