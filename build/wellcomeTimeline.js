@@ -1,4 +1,4 @@
-// 2670924 - 2013-02-24
+// 62c3b88 - 2013-02-26
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
@@ -3554,8 +3554,9 @@ function WellcomeTimelineProvider(options) {
             var imgElem = $('<img />');
 
             if (evnt.FeatureImagePath) {
-                self.nextDetailsElem.removeClass('min');
                 imgElem.prop('src', evnt.FeatureImagePath);
+            } else {
+                imgElem.prop('src', $.wellcome.timeline.provider.data.FeatureImagePath);
             }
 
             imgContainerElem.append(imgElem);
