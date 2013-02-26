@@ -101,6 +101,10 @@
                 vScrollbar: false,
                 hideScrollbar: true
             });
+            
+            $(self.scroll.scroller).on('selectstart', function () {
+                return false;
+            });
 
             self.yearTicksElem.hide();
             self.decadeTicksElem.hide();

@@ -76,15 +76,14 @@ Write-Host "complete `n"
 # Minify any further third party scripts (optional)
 Write-Host "---- minify third-party scripts ---- `n"
 
-<#
 $libs = @()
+$libs += $srcPath + "js\libs\iscroll.js"
 
 foreach($lib in $libs){
 	$i =$lib.LastIndexOf(".js")
     $minifiedName = $lib.Remove($i) + ".min.js"
     java -jar $cmplPath --js $lib --js_output_file $minifiedName
 }
-#>
 
 Write-Host "build complete `n"
 
