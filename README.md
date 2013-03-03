@@ -33,6 +33,8 @@ Providers could be created to work with any arbitrary date format that can be co
 
 To change the provider, edit the `provider` option of the `wellcomeTimeline` widget in [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html).
 
+Use the `data-uri` attribute of `div.timeline` to set the path to your custom data source.
+
 ### Project
 
 The timeline project is split into `/src` and `/build` directories, with a [`build.ps1`](https://github.com/wellcomelibrary/timeline/blob/master/build.ps1) PowerShell script in the root of the project which combines and minifies the various JavaScript files into [`/build/embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) and [`/build/wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js).
