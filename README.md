@@ -17,7 +17,7 @@ You can use the code in this panel to embed the timeline on your own website:
 
 The `/* wordpress fix */` empty script is for convenience when using the Wordpress WYSIWYG editor, which will otherwise strip out the script tags.
 
-[`embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) creates an iframe within `div.timeline` to host [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html). [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) contains all the jQueryUI widgets used to create the user interface, plus a few utility scripts.
+`[embed.min.js]`(https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) creates an iframe within `div.timeline` to host [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html). [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) contains all the jQueryUI widgets used to create the user interface, plus a few utility scripts.
 
 ###Data Format
 
