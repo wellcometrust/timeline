@@ -37,7 +37,7 @@ Use the `data-uri` attribute of `div.timeline` to set the path to your custom da
 
 ### Project
 
-The timeline project is split into `/src` and `/build` directories, with a [`build.ps1`](https://github.com/wellcomelibrary/timeline/blob/master/build.ps1) [PowerShell](http://en.wikipedia.org/wiki/Windows_PowerShell) script in the root of the project which combines and minifies the various JavaScript files into [`/build/embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) and [`/build/wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js), (right click > Run with PowerShell).
+The timeline project is split into `/src` and `/build` directories, with a [`build.ps1`](https://github.com/wellcomelibrary/timeline/blob/master/build.ps1) [PowerShell](http://en.wikipedia.org/wiki/Windows_PowerShell) script in the root of the project which combines and minifies the various JavaScript files into [`embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) and [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js), (right click > Run with PowerShell).
 
 To get the project running on localhost, create a website pointing to the `/src` directory with a virtual directory called 'build' pointing to the `/build` directory.
 
