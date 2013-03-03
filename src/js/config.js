@@ -21,6 +21,6 @@
     "EmbedView":
     {
         "Title": "Embed",
-        "EmbedInstructions": "To embed this item in your own website, copy and paste the code below:"
+        "EmbedInstructions": "To embed this timeline in your own website, copy and paste the code below:"
     }
 }
