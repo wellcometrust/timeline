@@ -17,7 +17,7 @@ You can use the code in this panel to embed the timeline on your own website:
 
 The `/* wordpress fix */` empty script is for convenience when using the Wordpress WYSIWYG editor, which will otherwise strip out the script tags.
 
-`embed.min.js` creates an iframe within `div.timeline` to host `timeline.html`. `wellcomeTimeline.min.js` contains all the jQueryUI widgets used to create the user interface, plus a few utility scripts.
+[`embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) creates an iframe within `div.timeline` to host [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html). [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) contains all the jQueryUI widgets used to create the user interface, plus a few utility scripts.
 
 ###Data Format
 
@@ -27,17 +27,17 @@ The example timeline employs the use of [Julian days](http://www.digirati.co.uk/
 
 However, the code controlling the main user interface only deals in [`moment`](https://github.com/timrwood/moment) objects.
 
-The timeline loosely employs the [Provider Model](http://en.wikipedia.org/wiki/Provider_model), which abstracts the date parsing out to `wellcomeTimelineProvider.js`.
+The timeline loosely employs the [Provider Model](http://en.wikipedia.org/wiki/Provider_model), which abstracts the date parsing out to [`wellcomeTimelineProvider.js`](https://github.com/wellcomelibrary/timeline/blob/master/src/js/wellcomeTimelineProvider.js).
 
 Providers could be created to work with any arbitrary date format that can be converted to [`moment`](https://github.com/timrwood/moment) objects.
 
 ### Project
 
-The timeline project is split into `/src` and `/build` directories, with a `build.ps1` PowerShell script in the root of the project which combines and minifies the various JavaScript files into `/build/embed.min.js` and `/build/wellcomeTimeline.min.js`.
+The timeline project is split into `/src` and `/build` directories, with a [`build.ps1`](https://github.com/wellcomelibrary/timeline/blob/master/build.ps1) PowerShell script in the root of the project which combines and minifies the various JavaScript files into [`/build/embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) and [`/build/wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js).
 
 To get the project running on localhost, create a website pointing to the `/src` directory with a virtual directory called 'build' pointing to the `/build` directory.
 
-To debug individual scripts, open `/src/timeline.html` and comment out the `wellcomeTimeline.min.js` script and uncomment the scripts directly underneath.
+To debug individual scripts, open [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html), comment out [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) and uncomment the scripts directly underneath.
 
 
 
