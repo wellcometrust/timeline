@@ -16,7 +16,7 @@ You can use the code in this panel to embed the timeline on your own website:
 	<div class="timeline" data-uri="/content/timelines/history-of-genetics-timeline/" data-eventid="" style="width:600px; height:600px; background-color: #000"></div>
 	<script type="text/javascript" src="http://wellcomelibrary.org/plugins/timeline/embed.min.js"></script><script type="text/javascript">/* wordpress fix */</script>
 
-The timeline also supports 'deep linking' to event, where a hash value is appended to the Url as you browse e.g: 
+The timeline also supports 'deep linking' to events, where a hash value is appended to the Url as you browse e.g: 
 
 http://wellcomelibrary.org/using-the-library/subject-guides/genetics/makers-of-modern-genetics/genetics-timeline/#16121
 
