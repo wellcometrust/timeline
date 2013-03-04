@@ -18,7 +18,7 @@ You can use the code in this panel to embed the timeline on your own website, e.
 
 The timeline also supports 'deep linking' to events, where a hash value is appended to the Url as you browse e.g: 
 
-http://wellcomelibrary.org/using-the-library/subject-guides/genetics/makers-of-modern-genetics/genetics-timeline/#16121
+[http://wellcomelibrary.org/.../genetics-timeline/#16121](http://wellcomelibrary.org/using-the-library/subject-guides/genetics/makers-of-modern-genetics/genetics-timeline/#16121)
 
 
 ##Developers 
