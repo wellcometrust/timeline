@@ -11,7 +11,7 @@ Timeline
 
 You will notice that the [Example Timeline](http://wellcomelibrary.org/using-the-library/subject-guides/genetics/makers-of-modern-genetics/genetics-timeline/) has an 'embed' option in the bottom-left corner.
 
-You can use the code in this panel to embed the timeline on your own website: 
+You can use the code in this panel to embed the timeline on your own website, e.g: 
 
 	<div class="timeline" data-uri="/content/timelines/history-of-genetics-timeline/" data-eventid="" style="width:600px; height:600px; background-color: #000"></div>
 	<script type="text/javascript" src="http://wellcomelibrary.org/plugins/timeline/embed.min.js"></script><script type="text/javascript">/* wordpress fix */</script>
