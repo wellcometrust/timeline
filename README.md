@@ -31,6 +31,8 @@ The timeline project is split into `/src` and `/build` directories, with a [`bui
 
 To get the project running on localhost, create a website pointing to the `/src` directory with a virtual directory called 'build' pointing to the `/build` directory.
 
+Alternatively, move the minified scripts into the `/src` directory.
+
 To debug individual scripts, open [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html), comment out [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) and uncomment the scripts directly underneath.
 
 
