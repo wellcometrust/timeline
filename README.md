@@ -23,7 +23,7 @@ The `/* wordpress fix */` empty script is for convenience when using the Wordpre
 
 [Example json data](http://wellcomelibrary.org/content/timelines/history-of-genetics-timeline/)
 
-The example timeline employs the use of [Julian days](http://www.digirati.co.uk/Blogs/Dates/2011/8/Handling-historical-dates/).
+The example timeline data employs the use of [Julian days](http://en.wikipedia.org/wiki/Julian_day). These are useful for plotting applications as they represent a calendar-independant, absolute unit of time.
 
 However, the code controlling the main user interface only deals in [`moment`](https://github.com/timrwood/moment) objects.
 
