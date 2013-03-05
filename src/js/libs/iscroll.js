@@ -42,8 +42,8 @@
 
         RESIZE_EV = 'onorientationchange' in window ? 'orientationchange' : 'resize',
         START_EV = hasTouch ? 'touchstart' : 'mousedown',
-        //MOVE_EV = hasTouch ? 'touchmove' : 'mousemove',
-        MOVE_EV = 'mousemove',
+        MOVE_EV = hasTouch ? 'touchmove' : 'mousemove',
+        //MOVE_EV = 'mousemove',
         END_EV = hasTouch ? 'touchend' : 'mouseup',
         CANCEL_EV = hasTouch ? 'touchcancel' : 'mouseup',
         TRNEND_EV = (function () {
