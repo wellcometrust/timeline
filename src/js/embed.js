@@ -44,9 +44,10 @@
     var a = document.createElement('a');
     a.href = scriptUri;
     var domain = a.hostname;
+    var portStr = (a.port == 80 ? '' : ':' + a.port);
 
-    $.when($.getScript('//' + domain + '/js/libs/easyXDM.min.js'),
-        $.getScript('//' + domain + '/js/libs/json2.min.js')).done(function () {
+    $.when($.getScript('//' + domain + portStr + '/js/libs/easyXDM.min.js'),
+        $.getScript('//' + domain + portStr + '/js/libs/json2.min.js')).done(function () {
 
             var timelines = $('.timeline');
 
@@ -149,7 +150,7 @@
 
         function createSocket() {
 
-            var uri = "http://" + domain + "/timeline.html?" +
+            var uri = "http://" + domain + portStr + "/timeline.html?" +
                 "isHomeDomain=" + isHomeDomain +
                 "&isOnlyInstance=" + isOnlyInstance +
                 "&dataUri=" + dataUri +

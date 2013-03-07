@@ -23,7 +23,8 @@ The timeline also supports 'deep linking' to events, where a hash value is appen
 
 ##Developers 
 
-The timeline project is split into `/src` and `/build` directories, with a [`build.ps1`](https://github.com/wellcomelibrary/timeline/blob/master/build.ps1) [PowerShell](http://en.wikipedia.org/wiki/Windows_PowerShell) script in the root of the project which combines and minifies the various JavaScript files into [`embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) and [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js), (right click > Run with PowerShell).
+The timeline project is split into `/src` and `/build` directories, with a [`build.ps1`](https://github.com/wellcomelibrary/timeline/blob/master/build.ps1) [PowerShell](http://en.wikipedia.org/wiki/Windows_PowerShell) script in the root of the project which combines and minifies the various JavaScript files into [`embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) and [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js), (right click > Run with PowerShell). 
+You will need [Google Closure Compiler](https://developers.google.com/closure/compiler/) - and a Java runtime - and will need to edit the build file to point to it).
 
 * [`embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) - creates an iframe within `div.timeline` to host [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html). 
 * [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) - contains all the jQueryUI widgets used to create the user interface, plus a few utility scripts.
@@ -33,7 +34,8 @@ To get the project running on localhost, create a website pointing to the `/src`
 
 Alternatively, move the minified scripts into the `/src` directory.
 
-To debug individual scripts, open [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html), comment out [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) and uncomment the scripts directly underneath.
+To debug individual scripts, open [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html), comment out [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) and uncomment the scripts directly underneath. 
+Also open [`index.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/index.html) and change the src of the script tag from [`build/embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) to [`js/embed.js`](https://github.com/wellcomelibrary/timeline/blob/master/js/embed.js) 
 
 
 ### Data Format
