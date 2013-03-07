@@ -19,7 +19,7 @@
             break;
         }
     }
-    
+
     var j, d;
     var loaded = false;
 
@@ -39,15 +39,15 @@
 })(window, document, "1.7.2", function ($, scriptUri, jqueryLoaded) {
 
     $.support.cors = true;
-    
+
     // get the scriptUri domain.
     var a = document.createElement('a');
     a.href = scriptUri;
     var domain = a.hostname;
-    var portStr = (a.port == 80 ? '' : ':' + a.port);
+    var port = (a.port == 80 ? '' : ':' + a.port);
 
-    $.when($.getScript('//' + domain + portStr + '/js/libs/easyXDM.min.js'),
-        $.getScript('//' + domain + portStr + '/js/libs/json2.min.js')).done(function () {
+    $.when($.getScript('//' + domain + port + '/js/libs/easyXDM.min.js'),
+        $.getScript('//' + domain + port + '/js/libs/json2.min.js')).done(function () {
 
             var timelines = $('.timeline');
 
@@ -70,7 +70,7 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $timeline.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
-        
+
         eventId = $timeline.attr('data-eventid');
 
         isFullScreen = false;
@@ -150,7 +150,7 @@
 
         function createSocket() {
 
-            var uri = "http://" + domain + portStr + "/timeline.html?" +
+            var uri = "http://" + domain + port + "/timeline.html?" +
                 "isHomeDomain=" + isHomeDomain +
                 "&isOnlyInstance=" + isOnlyInstance +
                 "&dataUri=" + dataUri +

@@ -86,5 +86,3 @@ foreach($lib in $libs){
 }
 
 Write-Host "build complete `n"
-
-pause

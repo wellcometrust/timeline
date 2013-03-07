@@ -32,7 +32,8 @@ You will need [Google Closure Compiler](https://developers.google.com/closure/co
 
 To get the project running on localhost, create a website pointing to the `/src` directory with a virtual directory called 'build' pointing to the `/build` directory.
 
-Alternatively, move the minified scripts into the `/src` directory.
+Alternatively, to run with Visual Studio's built-in web server 'Cassini' open the `/src` directory as a Web Site and change the solution's Virtual Path in the properties panel to `/`.
+It is not possible to create a virtual directory to `/build` with Cassini, so follow the steps in the next paragraph to use the unminified scripts.
 
 To debug individual scripts, open [`timeline.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/timeline.html), comment out [`wellcomeTimeline.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/wellcomeTimeline.min.js) and uncomment the scripts directly underneath. 
 Also open [`index.html`](https://github.com/wellcomelibrary/timeline/blob/master/src/index.html) and change the src of the script tag from [`build/embed.min.js`](https://github.com/wellcomelibrary/timeline/blob/master/build/embed.min.js) to [`js/embed.js`](https://github.com/wellcomelibrary/timeline/blob/master/js/embed.js) 
