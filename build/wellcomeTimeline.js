@@ -1,4 +1,4 @@
-// 18d05f2 - 2013-03-05
+// 296fe6e - 2013-03-07
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
@@ -3588,12 +3588,22 @@ function WellcomeTimelineProvider(options) {
             var $section = $('<section></section>');
 
             $section.html(evnt.Body);
-
+            
+            if (evnt.LinkText && evnt.LinkTarget) {
+                var actionLinkHtml = '<p><a class="action" href="' + evnt.LinkTarget + '">' + evnt.LinkText + '</a></p>';
+                $section.append(actionLinkHtml);
+            }
+            
+            if (evnt.ImageCredit) {
+                $section.append('<p><em>' + evnt.ImageCredit + '</em></p>');
+            }
+            
             // ensure anchor tags link to _blank.
             $section.find('a').prop('target', '_blank');
-
+            
             $textElem.append($header);
             $textElem.append($section);
+            
 
             self.centerColElem.append(self.nextDetailsElem);
 
