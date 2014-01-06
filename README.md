@@ -4,7 +4,16 @@ Timeline
 * Copyright (c) 2013 [The Wellcome Library](http://wellcomelibrary.org/)
 * License: [MIT](http://en.wikipedia.org/wiki/MIT_License)
 * Uses: [jQuery](https://github.com/jquery/jquery), [jQueryUI](https://github.com/jquery/jquery-ui), [moment](https://github.com/timrwood/moment), [iScroll](https://github.com/cubiq/iscroll), [jQuery Address](https://github.com/asual/jquery-address), [easyXDM](https://github.com/oyvindkinsey/easyXDM), [json2](https://github.com/douglascrockford/JSON-js)
-* [Example Timeline](http://wellcomelibrary.org/using-the-library/subject-guides/genetics/makers-of-modern-genetics/genetics-timeline/)
+* [Example Timeline]
+
+
+The timeline can be [seen in action here](http://wellcomelibrary.org/using-the-library/subject-guides/genetics/makers-of-modern-genetics/genetics-timeline/)
+
+The aim of the project was to provide a reusable presentation mechanism that was easily integrated into the Wellcome Library’s content management system and other data sources. The timeline can be embedded on any page, much like a YouTube video. Instead of a video file it loads a chunk of data in JSON format that provides it with text and graphics for all the events it needs to render. Anyone who can provide a file in this format can use the timeline to render their own events. 
+
+In this example the JSON is generated from a CMS – but it could come from any data source, or even be hand-crafted. [Here is an example](http://digirati-timeline-1.azurewebsites.net/Home/SavedTimelineByName?name=Battles-of-the-Hundred-Years-War) of the same timeline component loading JSON data generated from a SPARQL query to DBpedia:  
+
+The timeline shows more events as you zoom in, smoothly expanding the canvas until there is enough room for the chosen event.
 
 
 ## Embedding
