@@ -42,9 +42,11 @@
 
         RESIZE_EV = 'onorientationchange' in window ? 'orientationchange' : 'resize',
         START_EV = hasTouch ? 'touchstart' : 'mousedown',
+        //START_EV = 'touchstart mousedown',
         MOVE_EV = hasTouch ? 'touchmove' : 'mousemove',
-        //MOVE_EV = 'mousemove',
+        //MOVE_EV = 'touchmove mousemove',
         END_EV = hasTouch ? 'touchend' : 'mouseup',
+        //END_EV = 'touchend mouseup',
         CANCEL_EV = hasTouch ? 'touchcancel' : 'mouseup',
         TRNEND_EV = (function () {
             if (vendor === false) return false;
@@ -201,8 +203,6 @@
         wheelZoomCount: 0,
 
         handleEvent: function (e) {
-            console.log(e);
-
             var that = this;
             switch (e.type) {
                 case START_EV:

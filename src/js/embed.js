@@ -19,7 +19,7 @@
             break;
         }
     }
-
+    
     var j, d;
     var loaded = false;
 
@@ -39,7 +39,7 @@
 })(window, document, "1.7.2", function ($, scriptUri, jqueryLoaded) {
 
     $.support.cors = true;
-
+    
     // get the scriptUri domain.
     var a = document.createElement('a');
     a.href = scriptUri;
@@ -70,7 +70,7 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $timeline.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
-
+        
         eventId = $timeline.attr('data-eventid');
 
         isFullScreen = false;

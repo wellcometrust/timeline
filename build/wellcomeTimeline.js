@@ -1,4 +1,4 @@
-// 18d05f2 - 2013-03-05
+// 296fe6e - 2013-03-07
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
