@@ -39,7 +39,7 @@
             self.REDIRECT = "onRedirect";
             self.CLOSE_ACTIVE_DIALOGUE = "onCloseActiveDialogue";
             self.REFRESHED = "onRefreshed";
-            
+
             // bind to global events.
             $.wellcome.timeline.bind($.wellcome.timeline.ESCAPE, function () {
                 if (self.isFullScreen) {
@@ -47,7 +47,7 @@
                 }
             });
 
-            // communication with parent frame.       
+            // communication with parent frame.
             self.socket = new easyXDM.Socket({
                 onMessage: function (message, origin) {
                     message = $.parseJSON(message);
@@ -99,22 +99,22 @@
             if (index != -1) {
                 eventId = $.wellcome.timeline.getEventByIndex(index).EventId;
             }
-            
+
             self.setAddress(eventId);
         },
-        
+
         viewEvent: function(eventId) {
             var self = this;
 
             for (var i = 0, l = self.provider.data.Events.length; i < l; i++) {
                 var evnt = self.provider.data.Events[i];
-                
+
                 if (evnt.EventId == eventId) {
                     // give IE a bit of breathing room...
                     setTimeout(function () {
                         self.changeIndex(i);
                     }, 100);
-                    
+
                     break;
                 }
             }
