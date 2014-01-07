@@ -79,6 +79,10 @@
                 self.mouseX = e.pageX;
                 self.mouseY = e.pageY;
             });
+
+            if (!self.options.isHomeDomain){
+                trackVariable(2, 'Timeline Embedded', self.options.url, 2);
+            }
         },
 
         changeIndex: function (index) {

@@ -19,7 +19,7 @@
             break;
         }
     }
-    
+
     var j, d;
     var loaded = false;
 
@@ -39,7 +39,7 @@
 })(window, document, "1.7.2", function ($, scriptUri, jqueryLoaded) {
 
     $.support.cors = true;
-    
+
     // get the scriptUri domain.
     var a = document.createElement('a');
     a.href = scriptUri;
@@ -70,7 +70,7 @@
         // get initial params from the container's 'data-' attributes.
         dataUri = $timeline.attr('data-uri');
         dataUri = encodeURIComponent(dataUri);
-        
+
         eventId = $timeline.attr('data-eventid');
 
         isFullScreen = false;
@@ -155,7 +155,8 @@
                 "&isOnlyInstance=" + isOnlyInstance +
                 "&dataUri=" + dataUri +
                 "&eventId=" + eventId +
-                "&embedScriptUri=" + scriptUri;
+                "&embedScriptUri=" + scriptUri +
+                "&url=" + document.URL;
 
             socket = new easyXDM.Socket({
                 remote: uri,
@@ -178,9 +179,13 @@
                             refresh();
                             break;
                         case "onTrackEvent":
-                            //console.log(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value, message.eventObject.noninteraction);
-                            if ("undefined" !== typeof (_trackEvent)) {
-                                _trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value, message.eventObject.noninteraction);
+                            if ("undefined" !== typeof (trackEvent)) {
+                                trackEvent(message.eventObject.category, message.eventObject.action, message.eventObject.label, message.eventObject.value);
+                            }
+                            break;
+                        case "onTrackVariable":
+                            if ("undefined" !== typeof (trackVariable)) {
+                                trackVariable(message.eventObject.slot, message.eventObject.name, message.eventObject.value, message.eventObject.scope);
                             }
                             break;
                         default:

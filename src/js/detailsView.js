@@ -6,7 +6,7 @@
         isPrevEnabled: false,
         isNextEnabled: false,
         isNavigating: false,
-        
+
         options: {
             maxWidth: 950
         },
@@ -62,7 +62,7 @@
                 self.centerColElem.find('.wrapper').not(self.currentDetailsElem).remove();
                 self.nextDetailsElem = null;
             });
-   
+
             // create ui.
             self.leftColElem = $('<div class="leftCol"></div>');
             self.contentElem.append(self.leftColElem);
@@ -89,7 +89,7 @@
 
             // init ui.
             self.prevBtnElem.prop('title', $.wellcome.timeline.options.config.DetailsPanelView.Previous);
-            
+
             self.nextBtnElem.prop('title', $.wellcome.timeline.options.config.DetailsPanelView.Next);
 
             self.prevBtnElem.on('click', function (e) {
@@ -115,6 +115,8 @@
                     }
 
                     self._trigger('onSelectPrev');
+
+                    trackEvent('Timeline Interaction', 'Prev', '', '');
                 }
             });
 
@@ -123,6 +125,8 @@
 
                 if (self.isNextEnabled) {
                     self._trigger('onSelectNext');
+
+                    trackEvent('Timeline Interaction', 'Next', '', '');
                 }
             });
 
@@ -188,7 +192,7 @@
             }
 
             self.element.width(width);
-            
+
             self.element.css({
                 left: ($win.width() / 2) - (self.element.outerWidth(true) / 2)
             });
@@ -249,22 +253,22 @@
             var $section = $('<section></section>');
 
             $section.html(evnt.Body);
-            
+
             if (evnt.LinkText && evnt.LinkTarget) {
                 var actionLinkHtml = '<p><a class="action" href="' + evnt.LinkTarget + '">' + evnt.LinkText + '</a></p>';
                 $section.append(actionLinkHtml);
             }
-            
+
             if (evnt.ImageCredit) {
                 $section.append('<p><em>' + evnt.ImageCredit + '</em></p>');
             }
-            
+
             // ensure anchor tags link to _blank.
             $section.find('a').prop('target', '_blank');
-            
+
             $textElem.append($header);
             $textElem.append($section);
-            
+
 
             self.centerColElem.append(self.nextDetailsElem);
 
@@ -304,7 +308,7 @@
             self.isCloseEnabled = false;
             self.closeButtonElem.addClass('disabled');
         },
-        
+
         _enableClose: function () {
             var self = this;
 

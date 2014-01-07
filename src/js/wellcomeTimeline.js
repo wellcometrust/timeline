@@ -40,7 +40,8 @@
                 config: self.config,
                 embedScriptUri: self.options.embedScriptUri,
                 isHomeDomain: self.options.isHomeDomain,
-                isOnlyInstance: self.options.isOnlyInstance
+                isOnlyInstance: self.options.isOnlyInstance,
+                url: self.options.url
             });
         },
 
