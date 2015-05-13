@@ -197,18 +197,18 @@
                 left: ($win.width() / 2) - (self.element.outerWidth(true) / 2)
             });
 
-            var centerColWidth = width - self.leftColElem.outerWidth() - self.rightColElem.outerWidth();
+            var centerColWidth = Math.floor(width - self.leftColElem.outerWidth() - self.rightColElem.outerWidth());
 
             self.centerColElem.width(centerColWidth);
             self.centerColElem.find('.wrapper').width(centerColWidth);
 
-            var centerLeftColWidth = self.centerLeftColElem.outerWidth(true);
-            var centerRightColWidth = self.centerColElem.width() - centerLeftColWidth;
+            var centerLeftColWidth = Math.floor(self.centerLeftColElem.outerWidth(true));
+            var centerRightColWidth = Math.floor(self.centerColElem.width() - centerLeftColWidth);
 
-            var leftMargin = parseInt(self.centerRightColElem.css('margin-left'));
-            var rightMargin = parseInt(self.centerRightColElem.css('margin-right'));
+            var leftMargin = Math.floor(parseInt(self.centerRightColElem.css('margin-left')));
+            var rightMargin = Math.floor(parseInt(self.centerRightColElem.css('margin-right')));
 
-            centerRightColWidth = centerRightColWidth - (leftMargin + rightMargin);
+            centerRightColWidth = centerRightColWidth - (leftMargin + rightMargin) - 10;
 
             self.centerRightColElem.width(centerRightColWidth);
         },
