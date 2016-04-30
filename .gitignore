@@ -1,4 +1,3 @@
-build/
 Web.config
 *.map
 *.sublime-workspace
