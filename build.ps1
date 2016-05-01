@@ -6,7 +6,7 @@ $commitComment = "// " + (git log --pretty=format:"%h - %ad" -1 --date=short)
 $path = $MyInvocation.MyCommand.Path
 $parentDir = $path.Remove($path.LastIndexOf("\"))
 
-$cmplPath = "C:\Temp\google-closure\compiler.jar"
+$cmplPath = "C:\google-closure\compiler.jar"
 $srcPath = $parentDir + "\src\"
 $bldPath = $parentDir + "\build\"
 
