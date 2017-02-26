@@ -44,6 +44,7 @@
     var a = document.createElement('a');
     a.href = scriptUri;
     var domain = a.hostname;
+    var protocol = a.protocol;
     var port = (a.port == 80 ? '' : ':' + a.port);
 
     $.when($.getScript('//' + domain + port + '/js/libs/easyXDM.min.js'),
@@ -150,7 +151,7 @@
 
         function createSocket() {
 
-            var uri = "http://" + domain + port + "/timeline.html?" +
+            var uri = protocol + "//" + domain + port + "/timeline.html?" +
                 "isHomeDomain=" + isHomeDomain +
                 "&isOnlyInstance=" + isOnlyInstance +
                 "&dataUri=" + dataUri +
