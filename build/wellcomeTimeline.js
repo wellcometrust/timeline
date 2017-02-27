@@ -1,4 +1,4 @@
-// 01675f1 - 2016-04-30
+// b865c5b - 2016-05-01
 //-------
 // convert calendar to Julian date
 // (Julian day number algorithm adopted from Press et al.)
